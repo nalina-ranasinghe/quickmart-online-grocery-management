@@ -1,0 +1,118 @@
+<!-- src/main/resources/templates/footer.html -->
+<div th:fragment="footer">
+    <style>
+    :root {
+        --dark-green: #123523;
+        --medium-green: #3E7B27;
+        --light-green: #85A947;
+        --beige: #EFE3C2;
+        --white: #FFFFFF;
+        --transition-speed: 0.3s;
+    }
+    footer {
+        background-color: var(--dark-green);
+        color: var(--white);
+        padding: 40px 0;
+        margin-top: 50px;
+    }
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: justify;
+    }
+    .footer-section {
+        flex: 1;
+        min-width: 250px;
+        margin-bottom: 20px;
+        padding: 0 15px;
+        box-sizing: border-box;
+        justify-content: justify;
+    }
+    .footer-section h3 {
+        color: #efc99d;
+    }
+    .social-icons {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+        justify-content: left;
+    }
+    .social-icon img {
+        width: 24px;
+        height: 24px;
+        transition: transform var(--transition-speed);
+    }
+    .social-icon:hover img {
+        transform: scale(1.2);
+    }
+    .footer-divider {
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.2);
+        margin: 20px auto;
+        max-width: 1200px;
+        padding: 0 20px;
+    }
+    .copyright {
+        text-align: center;
+        color:#efc99d;
+        font-size: 14px;
+        padding: 0 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .copyright a {
+        color: #efc99d;
+        text-decoration: none;
+        transition: color var(--transition-speed);
+    }
+    .copyright a:hover {
+        color: var(--white);
+        text-decoration: underline;
+    }
+    @media screen and (max-width: 768px) {
+        .footer-container {
+            flex-direction: column;
+        }
+        .footer-section {
+            width: 100%;
+            flex-basis: 100%;
+        }
+    }
+    </style>
+    <footer>
+        <div class="footer-container">
+            <div id="contact-us" class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@quickmart.com</p>
+                <p>Phone: (+94) 77 028 4928</p>
+                <p>Address: 529 Market Street, Kengalla</p>
+            </div>
+
+            <div id="about-us" class="footer-section">
+                <h3>About QuickMart</h3>
+                <p>QuickMart is your neighborhood grocery store, committed to providing fresh, high-quality products at affordable prices.</p>
+            </div>
+
+            <div id="follow-us" class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><img th:src="@{/images/whatsapp.png}" alt="WhatsApp"></a>
+                    <a href="#" class="social-icon"><img th:src="@{/images/facebook_b&w.png}" alt="Facebook"></a>
+                    <a href="#" class="social-icon"><img th:src="@{/images/messenger.png}" alt="Messenger"></a>
+                    <a href="#" class="social-icon"><img th:src="@{/images/instagram.png}" alt="Instagram"></a>
+                    <a href="#" class="social-icon"><img th:src="@{/images/linkedin.png}" alt="LinkedIn"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="copyright">
+            Copyright © 2025 QuickMart Corporation | All Rights Reserved |
+            <a href="#">Terms and Conditions</a> | <a href="#">Privacy Policy</a>
+        </div>
+    </footer>
+</div> 

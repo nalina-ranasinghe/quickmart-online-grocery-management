@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isNew ? 'Add New Prime Member' : 'Edit Prime Member'} + ' | QuickMart'">Add/Edit Prime Member | QuickMart</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --off-white: #F8F9FA;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--off-white);
+            color: var(--dark-green);
+        }
+
+        .navbar {
+            background-color: var(--dark-green);
+        }
+
+        .navbar-brand img {
+            max-height: 40px;
+        }
+
+        .form-card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        .form-card .card-header {
+            background-color: var(--medium-green);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .btn-primary {
+            background-color: var(--medium-green);
+            border-color: var(--medium-green);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+        .btn-success {
+            background-color: var(--light-green);
+            border-color: var(--light-green);
+        }
+
+        .btn-success:hover {
+            background-color: var(--medium-green);
+            border-color: var(--medium-green);
+        }
+
+        .btn-outline-success {
+            color: var(--medium-green);
+            border-color: var(--medium-green);
+        }
+
+        .btn-outline-success:hover {
+            background-color: var(--medium-green);
+            color: white;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-green);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--medium-green);
+            box-shadow: 0 0 0 0.25rem rgba(62, 123, 39, 0.25);
+        }
+
+        .tier-info {
+            background-color: var(--cream);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tier-info h5 {
+            color: var(--dark-green);
+        }
+
+        .tier-info ul {
+            padding-left: 20px;
+        }
+
+        .tier-info li {
+            margin-bottom: 8px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .section-title {
+            border-left: 4px solid var(--medium-green);
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="/images/QUICKMART_logo.png" alt="QuickMart Logo" style="max-height: 64px; display: block;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/prime-members"><i class="fas fa-users"></i> Prime Members</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reports"><i class="fas fa-chart-line"></i> Reports</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container my-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/prime-members" class="text-decoration-none">Prime Members</a></li>
+            <li class="breadcrumb-item active" th:text="${isNew ? 'Add New Member' : 'Edit Member'}">Add/Edit Member</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card form-card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-plus me-2" th:if="${isNew}"></i>
+                        <i class="fas fa-user-edit me-2" th:unless="${isNew}"></i>
+                        <span th:text="${isNew ? 'Add New Prime Member' : 'Edit Prime Member'}">Add/Edit Prime Member</span>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/prime-members/save}" th:object="${member}" method="post">
+                        <input type="hidden" th:field="*{id}" />
+
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span th:text="${error}">Error message</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contactNumber" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="contactNumber" th:field="*{contactNumber}" 
+                                   pattern="^0\d{9}$" required
+                                   title="Contact number must be exactly 10 digits and start with 0">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}"></div>
+                            <small class="form-text text-muted">Must be exactly 10 digits starting with 0 (e.g., 0771234567)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="points" class="form-label">Points</label>
+                            <input type="number" class="form-control" id="points" th:field="*{points}" min="3000" onchange="updateTierInfo()">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('points')}" th:errors="*{points}"></div>
+                            <small class="form-text text-muted">
+                                Points must be at least 3000 for prime members. 50 points earned for every 1000 LKR spent.
+                            </small>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="tier-info">
+                                <h5><i class="fas fa-info-circle me-2"></i>Current Tier Info</h5>
+                                <div id="tierDisplay">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-secondary me-2" id="currentTierBadge">Loading...</span>
+                                        <span id="currentDiscountRate">Loading...</span>
+                                    </div>
+                                    <div class="progress mb-3" style="height: 20px;">
+                                        <div class="progress-bar bg-success" id="tierProgressBar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <p id="tierProgressText">Loading tier information...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="/prime-members" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Save Member
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card form-card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-crown me-2"></i>Tier Benefits</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6 class="d-flex align-items-center">
+                            <span class="feature-icon"><i class="fas fa-medal"></i></span>
+                            Silver Tier (≥ 3,000 points)
+                        </h6>
+                        <ul>
+                            <li>3% discount on all purchases</li>
+                            <li>Free standard delivery</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="d-flex align-items-center">
+                            <span class="feature-icon" style="background-color: #FFD700;"><i class="fas fa-medal"></i></span>
+                            Gold Tier (≥ 5,000 points)
+                        </h6>
+                        <ul>
+                            <li>5% discount on all purchases</li>
+                            <li>Free standard delivery</li>
+                            <li>Priority customer service</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h6 class="d-flex align-items-center">
+                            <span class="feature-icon" style="background-color: #E5E4E2;"><i class="fas fa-medal"></i></span>
+                            Platinum Tier (≥ 10,000 points)
+                        </h6>
+                        <ul>
+                            <li>10% discount on all purchases</li>
+                            <li>Free express delivery</li>
+                            <li>Priority customer service</li>
+                            <li>Exclusive special offers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JavaScript -->
+<script>
+    function updateTierInfo() {
+        const points = parseInt(document.getElementById('points').value) || 0;
+        let tier, discountRate, nextTier, pointsNeeded, progressWidth;
+
+        // Determine tier based on points
+        if (points >= 10000) {
+            tier = "PLATINUM";
+            discountRate = "10%";
+            nextTier = null;
+            pointsNeeded = 0;
+            progressWidth = 100;
+        } else if (points >= 5000) {
+            tier = "GOLD";
+            discountRate = "5%";
+            nextTier = "PLATINUM";
+            pointsNeeded = 10000 - points;
+            progressWidth = (points - 5000) / (10000 - 5000) * 100;
+        } else if (points >= 3000) {
+            tier = "SILVER";
+            discountRate = "3%";
+            nextTier = "GOLD";
+            pointsNeeded = 5000 - points;
+            progressWidth = (points - 3000) / (5000 - 3000) * 100;
+        } else {
+            tier = "STANDARD";
+            discountRate = "0%";
+            nextTier = "SILVER";
+            pointsNeeded = 3000 - points;
+            progressWidth = points / 3000 * 100;
+        }
+
+        // Update the badge
+        const tierBadge = document.getElementById('currentTierBadge');
+        tierBadge.textContent = tier;
+
+        // Update badge color
+        tierBadge.className = 'badge me-2';
+        if (tier === 'PLATINUM') tierBadge.classList.add('bg-secondary');
+        else if (tier === 'GOLD') tierBadge.classList.add('bg-warning', 'text-dark');
+        else if (tier === 'SILVER') tierBadge.classList.add('bg-secondary');
+        else tierBadge.classList.add('bg-light', 'text-dark');
+
+        // Update discount rate
+        document.getElementById('currentDiscountRate').textContent = `Discount: ${discountRate}`;
+
+        // Update progress bar
+        document.getElementById('tierProgressBar').style.width = `${progressWidth}%`;
+
+        // Update progress text
+        const progressText = document.getElementById('tierProgressText');
+        if (nextTier) {
+            progressText.textContent = `${pointsNeeded} more points needed to reach ${nextTier} tier.`;
+        } else {
+            progressText.textContent = 'Maximum tier reached!';
+        }
+    }
+
+    // Initialize tier display on page load
+    document.addEventListener('DOMContentLoaded', updateTierInfo);
+</script>
+
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Details | QuickMart</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --off-white: #F8F9FA;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--off-white);
+            color: var(--dark-green);
+        }
+
+        .navbar {
+            background-color: var(--dark-green);
+        }
+
+        .navbar-brand img {
+            max-height: 40px;
+        }
+
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        .card-header {
+            background-color: var(--medium-green);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .btn-primary {
+            background-color: var(--medium-green);
+            border-color: var(--medium-green);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+        .btn-success {
+            background-color: var(--light-green);
+            border-color: var(--light-green);
+        }
+
+        .btn-success:hover {
+            background-color: var(--medium-green);
+            border-color: var(--medium-green);
+        }
+
+        .btn-outline-success {
+            color: var(--medium-green);
+            border-color: var(--medium-green);
+        }
+
+        .btn-outline-success:hover {
+            background-color: var(--medium-green);
+            color: white;
+        }
+
+        .detail-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--dark-green);
+        }
+
+        .tier-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .tier-silver {
+            background-color: #C0C0C0;
+            color: #333;
+        }
+
+        .tier-gold {
+            background-color: #FFD700;
+            color: #333;
+        }
+
+        .tier-platinum {
+            background-color: #E5E4E2;
+            color: #333;
+        }
+
+        .detail-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .detail-header {
+            background-color: var(--cream);
+            padding: 20px;
+            position: relative;
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            background-color: var(--medium-green);
+            color: white;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 15px;
+        }
+
+        .stats-card {
+            background-color: var(--cream);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            background-color: var(--medium-green);
+        }
+
+        .points-history {
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .qr-code {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-code img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .member-id-card {
+            background: linear-gradient(135deg, var(--medium-green), var(--dark-green));
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .member-id-card .logo {
+            max-height: 40px;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="/images/QUICKMART_logo.png" alt="QuickMart Logo" style="max-height: 64px; display: block;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/prime-members"><i class="fas fa-users"></i> Prime Members</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reports"><i class="fas fa-chart-line"></i> Reports</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container my-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/prime-members" class="text-decoration-none">Prime Members</a></li>
+            <li class="breadcrumb-item active" th:text="${member.name}">Member Details</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Left Column - Member Details -->
+        <div class="col-md-8">
+            <div class="detail-card mb-4">
+                <!-- Member Header with Basic Info -->
+                <div class="detail-header text-center position-relative">
+                    <div class="action-buttons">
+                        <a th:href="@{/prime-members/edit/{id}(id=${member.id})}" class="btn btn-sm btn-primary me-1">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="#" onclick="confirmDelete()" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </a>
+                    </div>
+
+                    <div class="member-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 th:text="${member.name}" class="mb-2">Member Name</h3>
+                    <div class="mb-3">
+                        <span th:class="${'tier-badge ' + 'tier-' + #strings.toLowerCase(member.tier)}">
+                            <i class="fas fa-medal me-1"></i>
+                            <span th:text="${member.tier}">Tier</span> Member
+                        </span>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-around">
+                                <div class="text-center">
+                                    <div class="h4" th:text="${member.points}">3500</div>
+                                    <div class="small">Points</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="h4" th:text="${#numbers.formatPercent(member.discount, 1, 0)}">5%</div>
+                                    <div class="small">Discount</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Information -->
+                <div class="card-body">
+                    <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-info-circle me-2"></i>Member Information</h5>
+
+                    <div class="row detail-row">
+                        <div class="col-md-4 detail-label">Member ID</div>
+                        <div class="col-md-8" th:text="${member.id}">QM001</div>
+                    </div>
+
+                    <div class="row detail-row">
+                        <div class="col-md-4 detail-label">Email Address</div>
+                        <div class="col-md-8">
+                            <a th:href="'mailto:' + ${member.email}" th:text="${member.email}">email@example.com</a>
+                        </div>
+                    </div>
+
+                    <div class="row detail-row">
+                        <div class="col-md-4 detail-label">Contact Number</div>
+                        <div class="col-md-8">
+                            <a th:href="'tel:' + ${member.contactNumber}" th:text="${member.contactNumber}">0123456789</a>
+                        </div>
+                    </div>
+
+                    <div class="row detail-row">
+                        <div class="col-md-4 detail-label">Points Balance</div>
+                        <div class="col-md-8">
+                            <span class="fw-bold" th:text="${member.points}">3500</span> points
+                        </div>
+                    </div>
+
+                    <div class="row detail-row">
+                        <div class="col-md-4 detail-label">Membership Tier</div>
+                        <div class="col-md-8">
+                            <span th:class="${'tier-badge ' + 'tier-' + #strings.toLowerCase(member.tier)}" th:text="${member.tier}">SILVER</span>
+                        </div>
+                    </div>
+
+                    <div class="row detail-row">
+                        <div class="col-md-4 detail-label">Discount Rate</div>
+                        <div class="col-md-8" th:text="${#numbers.formatPercent(member.discount, 1, 0)}">3%</div>
+                    </div>
+
+                    <div class="row detail-row">
+                        <div class="col-md-4 detail-label">Tier Progress</div>
+                        <div class="col-md-8">
+                            <div class="progress mb-2" id="tierProgressContainer">
+                                <div class="progress-bar" id="tierProgressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-muted" id="tierProgressText">Loading tier progress...</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member Benefits Section -->
+                <div class="card-body border-top">
+                    <h5 class="mb-3 border-bottom pb-2"><i class="fas fa-gift me-2"></i>Member Benefits</h5>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span th:text="${#numbers.formatPercent(member.discount, 1, 0) + ' discount on all purchases'}">3% discount on all purchases</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span>Free delivery on all orders</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex align-items-center" th:if="${member.tier == 'GOLD' || member.tier == 'PLATINUM'}">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span>Priority customer service</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center" th:if="${member.tier == 'PLATINUM'}">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span>Access to exclusive offers</span>
+                                </li>
+                                <li class="list-group-item d-flex align-items-center" th:if="${member.tier == 'PLATINUM'}">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span>Express delivery option</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Points Simulation Tool -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>Points Simulator</h5>
+                </div>
+                <div class="card-body">
+                    <p>See how purchases will affect this member's points and tier status.</p>
+
+                    <div class="mb-3">
+                        <label for="purchaseAmount" class="form-label">Purchase Amount (LKR)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">LKR</span>
+                            <input type="number" class="form-control" id="purchaseAmount" min="0" step="500" value="5000">
+                            <button class="btn btn-primary" id="calculatePoints">Calculate</button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success d-none" id="pointsResult">
+                        <h6><i class="fas fa-star me-2"></i>Simulation Result</h6>
+                        <p class="mb-1">This purchase will earn <span id="pointsEarned">0</span> points.</p>
+                        <p class="mb-1">New points balance: <span id="newPointsBalance">0</span></p>
+                        <p class="mb-0">New tier: <span id="newTier">SILVER</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Member Card and Related Data -->
+        <div class="col-md-4">
+            <!-- Member ID Card -->
+            <div class="member-id-card mb-4">
+                <img src="/images/QUICKMART_logo.png" alt="QuickMart Logo" class="logo">
+                <h5 class="text-white mt-3">Prime Member</h5>
+                <h2 th:text="${member.name}" class="mb-3">John Smith</h2>
+                <div class="row mb-2">
+                    <div class="col-5">Member ID:</div>
+                    <div class="col-7 fw-bold" th:text="${member.id}">PM001</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5">Tier:</div>
+                    <div class="col-7 fw-bold" th:text="${member.tier}">GOLD</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-5">Valid From:</div>
+                    <div class="col-7 fw-bold" th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}">14/05/2025</div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center mt-3">
+                    <div class="qr-code bg-white p-2 rounded-3" style="box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                        <img th:if="${qrCode}" th:src="'data:image/png;base64,' + ${qrCode}" alt="Member QR Code" style="width:140px;height:140px;object-fit:contain;">
+                    </div>
+                </div>
+                <div class="text-center mt-2">
+                    <span class="text-white small">member details</span>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Points to Next Tier</h5>
+                </div>
+                <div class="card-body">
+                    <div id="tierInfo">
+                        <div class="text-center mb-3">
+                            <div id="currentTierIcon" class="d-inline-block p-3 rounded-circle mb-2" style="background-color: var(--light-green);">
+                                <i class="fas fa-medal fa-2x text-white"></i>
+                            </div>
+                            <h5 id="currentTierName">Loading...</h5>
+                        </div>
+
+                        <div class="stats-card mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-5">Current:</div>
+                                <div class="col-7 text-end fw-bold" id="currentPoints">0</div>
+                            </div>
+                            <div class="row align-items-center" id="nextTierRow">
+                                <div class="col-5">Next Tier:</div>
+                                <div class="col-7 text-end fw-bold" id="pointsNeeded">0</div>
+                            </div>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" id="nextTierProgress" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6>How to earn more points</h6>
+                                <ul class="mb-0">
+                                    <li>Earn 50 points for every 1,000 LKR spent</li>
+                                    <li>Points never expire</li>
+                                    <li>Tier upgrades happen automatically</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the member <span class="fw-bold" th:text="${member.name}">Member Name</span>?</p>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a th:href="@{/prime-members/delete/{id}(id=${member.id})}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JavaScript -->
+<script th:inline="javascript">
+    // Get member data from Thymeleaf
+    const memberData = /*[[${member}]]*/ {
+        id: null,
+        name: '',
+        email: '',
+        contactNumber: '',
+        points: 0,
+        tier: 'STANDARD',
+        discount: 0.03
+    };
+
+    // Function to show loading state
+    function showLoading(element) {
+        element.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+    }
+
+    // Function to show error message
+    function showError(element, message) {
+        element.innerHTML = `<div class="alert alert-danger mb-0">${message}</div>`;
+    }
+
+    // Function to initialize tier progress display
+    function initTierProgress() {
+        try {
+            const points = memberData.points;
+            const currentPoints = document.getElementById('currentPoints');
+            const pointsNeeded = document.getElementById('pointsNeeded');
+            const nextTierProgress = document.getElementById('nextTierProgress');
+            const currentTierName = document.getElementById('currentTierName');
+            const currentTierIcon = document.getElementById('currentTierIcon');
+            const nextTierRow = document.getElementById('nextTierRow');
+
+            // Update progress bar in member details section
+            const tierProgressBar = document.getElementById('tierProgressBar');
+            const tierProgressText = document.getElementById('tierProgressText');
+
+            if (!points || points < 0) {
+                throw new Error('Invalid points value');
+            }
+
+            currentPoints.textContent = points.toLocaleString();
+            currentTierName.textContent = memberData.tier + ' Tier';
+
+            let progress = 0;
+            let nextTierName = '';
+            let pointsRequired = 0;
+
+            // Set tier icon color
+            if (memberData.tier === 'PLATINUM') {
+                currentTierIcon.style.backgroundColor = '#E5E4E2';
+                currentTierIcon.style.color = '#333';
+            } else if (memberData.tier === 'GOLD') {
+                currentTierIcon.style.backgroundColor = '#FFD700';
+                currentTierIcon.style.color = '#333';
+            } else {
+                currentTierIcon.style.backgroundColor = '#C0C0C0';
+                currentTierIcon.style.color = '#333';
+            }
+
+            // Calculate progress to next tier
+            if (points >= 10000) {
+                // Platinum tier (max)
+                progress = 100;
+                tierProgressBar.style.width = '100%';
+                tierProgressText.textContent = 'Maximum tier reached (Platinum)';
+                nextTierRow.classList.add('d-none');
+            } else if (points >= 5000) {
+                // Gold tier
+                nextTierName = 'PLATINUM';
+                pointsRequired = 10000 - points;
+                progress = ((points - 5000) / 5000) * 100;
+                tierProgressBar.style.width = progress + '%';
+                tierProgressText.textContent = `${pointsRequired.toLocaleString()} more points needed to reach Platinum tier`;
+                pointsNeeded.textContent = pointsRequired.toLocaleString();
+            } else if (points >= 3000) {
+                // Silver tier
+                nextTierName = 'GOLD';
+                pointsRequired = 5000 - points;
+                progress = ((points - 3000) / 2000) * 100;
+                tierProgressBar.style.width = progress + '%';
+                tierProgressText.textContent = `${pointsRequired.toLocaleString()} more points needed to reach Gold tier`;
+                pointsNeeded.textContent = pointsRequired.toLocaleString();
+            } else {
+                // Standard tier (not silver yet)
+                nextTierName = 'SILVER';
+                pointsRequired = 3000 - points;
+                progress = (points / 3000) * 100;
+                tierProgressBar.style.width = progress + '%';
+                tierProgressText.textContent = `${pointsRequired.toLocaleString()} more points needed to reach Silver tier`;
+                pointsNeeded.textContent = pointsRequired.toLocaleString();
+            }
+
+            nextTierProgress.style.width = progress + '%';
+        } catch (error) {
+            console.error('Error initializing tier progress:', error);
+            showError(document.getElementById('tierProgressText'), 'Error loading tier progress. Please refresh the page.');
+        }
+    }
+
+    // Function to handle the points simulator
+    function initPointsSimulator() {
+        const calculateBtn = document.getElementById('calculatePoints');
+        const purchaseAmount = document.getElementById('purchaseAmount');
+        const pointsResult = document.getElementById('pointsResult');
+        const pointsEarned = document.getElementById('pointsEarned');
+        const newPointsBalance = document.getElementById('newPointsBalance');
+        const newTier = document.getElementById('newTier');
+
+        calculateBtn.addEventListener('click', function() {
+            try {
+                const amount = parseFloat(purchaseAmount.value);
+                
+                // Input validation
+                if (isNaN(amount) || amount < 0) {
+                    throw new Error('Please enter a valid amount greater than 0');
+                }
+
+                // Show loading state
+                pointsResult.classList.remove('d-none');
+                pointsResult.classList.remove('alert-success');
+                pointsResult.classList.add('alert-info');
+                showLoading(pointsResult);
+
+                // Calculate points
+                const earnedPoints = Math.floor(amount / 1000 * 50);
+                const newTotal = memberData.points + earnedPoints;
+
+                // Determine new tier
+                let tierName = 'SILVER';
+                if (newTotal >= 10000) {
+                    tierName = 'PLATINUM';
+                } else if (newTotal >= 5000) {
+                    tierName = 'GOLD';
+                } else if (newTotal >= 3000) {
+                    tierName = 'SILVER';
+                } else {
+                    tierName = 'STANDARD';
+                }
+
+                // Update result
+                pointsResult.classList.remove('alert-info');
+                pointsResult.classList.add('alert-success');
+                pointsResult.innerHTML = `
+                    <h6><i class="fas fa-star me-2"></i>Simulation Result</h6>
+                    <p class="mb-1">This purchase will earn <span id="pointsEarned">${earnedPoints.toLocaleString()}</span> points.</p>
+                    <p class="mb-1">New points balance: <span id="newPointsBalance">${newTotal.toLocaleString()}</span></p>
+                    <p class="mb-0">New tier: <span id="newTier">${tierName}</span></p>
+                `;
+            } catch (error) {
+                console.error('Error calculating points:', error);
+                pointsResult.classList.remove('alert-info');
+                pointsResult.classList.add('alert-danger');
+                pointsResult.innerHTML = `<h6><i class="fas fa-exclamation-circle me-2"></i>Error</h6><p class="mb-0">${error.message}</p>`;
+            }
+        });
+    }
+
+    // Function to show delete confirmation modal
+    function confirmDelete() {
+        try {
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        } catch (error) {
+            console.error('Error showing delete modal:', error);
+            alert('Error showing delete confirmation. Please try again.');
+        }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            initTierProgress();
+            initPointsSimulator();
+        } catch (error) {
+            console.error('Error initializing page:', error);
+            alert('Error initializing page. Please refresh and try again.');
+        }
+    });
+</script>
+<div th:replace="footer :: footer"></div>
+</body>
+</html>
