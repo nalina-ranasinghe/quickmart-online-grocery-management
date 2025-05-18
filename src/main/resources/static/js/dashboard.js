@@ -69,31 +69,27 @@ function initTheme() {
 function initSidebar() {
     // Mobile toggle
     if (mobileToggle) {
-        mobileToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('show');
+        mobileToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
         });
     }
     
     // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', function(e) {
-        if (sidebar.classList.contains('show') && !sidebar.contains(e.target) && e.target !== mobileToggle) {
-            sidebar.classList.remove('show');
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(e.target) && 
+            !mobileToggle.contains(e.target) && 
+            sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
         }
     });
     
     // Sidebar link active state
+    const currentPath = window.location.pathname;
     sidebarLinks.forEach(link => {
-        // Set active based on current URL
-        if (link.getAttribute('href') === window.location.pathname) {
+        if (link.getAttribute('href') === currentPath) {
             link.classList.add('active');
         }
-        
-        // Add click handler
-        link.addEventListener('click', function() {
-            // Client-side navigation effect
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-        });
     });
 }
 
@@ -676,10 +672,14 @@ function initDataTables() {
  */
 function initSearch() {
     searchInputs.forEach(input => {
-        input.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                alert('Searching for: ' + this.value + ' (This would be implemented in a real application)');
-            }
+        input.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
         });
     });
 }

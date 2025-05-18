@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Prime Members - QuickMart Admin</title>
-    <link href="/css/dashboard.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Sidebar (reuse from admin-dashboard.html) -->
-    <!-- ...sidebar code here... -->
-    <div class="main-content">
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+    <div style="margin-left:16rem; padding:2rem;">
         <h1>Prime Members</h1>
         <p>This is the Prime Members page.</p>
     </div>
