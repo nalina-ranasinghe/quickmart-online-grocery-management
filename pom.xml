@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com</groupId>
-	<artifactId>LoyaltyMwmber</artifactId>
+	<artifactId>LoyaltyMember</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quickmart</name>
 	<description>QuickMart loyalty page spring boot project</description>

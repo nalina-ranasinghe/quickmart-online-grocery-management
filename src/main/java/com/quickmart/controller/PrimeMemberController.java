@@ -1,3 +1,5 @@
+// Completed Prime Member Controller
+
 package com.quickmart.controller;
 
 import com.quickmart.model.PrimeMember;
