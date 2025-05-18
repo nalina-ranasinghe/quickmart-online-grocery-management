@@ -1,3 +1,5 @@
+// PrimeMember java completed
+
 package com.quickmart.model;
 
 import jakarta.validation.constraints.Email;
