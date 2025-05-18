@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+</head>
+<body>
+    <h1>Test Page - If you can see this, routing is working</h1>
+    <p>This is a test page to verify that the controller mappings are working correctly.</p>
+    
+    <h2>Available Routes:</h2>
+    <ul>
+        <li><a href="/">/</a> - Root route (should redirect to login)</li>
+        <li><a href="/admin">/admin</a> - Admin route (should redirect to login)</li>
+        <li><a href="/admin/login">/admin/login</a> - Admin login page</li>
+        <li><a href="/admin/home">/admin/home</a> - Admin dashboard</li>
+        <li><a href="/admin/user-management">/admin/user-management</a> - User management</li>
+        <li><a href="/admin/prime-members">/admin/prime-members</a> - Prime members</li>
+        <li><a href="/admin/product-management">/admin/product-management</a> - Product management</li>
+        <li><a href="/admin/order-overview">/admin/order-overview</a> - Order overview</li>
+        <li><a href="/logout">/logout</a> - Logout (should redirect to login)</li>
+        <li><a href="/non-existent-page">/non-existent-page</a> - Should show error page</li>
+    </ul>
+</body>
+</html> 
