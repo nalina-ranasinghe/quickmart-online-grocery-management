@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Quick Mart</title>
+    <style>
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --off-white: #F8F8F2;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--off-white);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--cream);
+        }
+        .header h1 {
+            color: var(--dark-green);
+            font-size: 28px;
+        }
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .user-table th, .user-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .user-table th {
+            background-color: var(--dark-green);
+            color: white;
+            font-weight: 600;
+        }
+        .user-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .edit-btn, .delete-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .edit-btn {
+            background-color: var(--medium-green);
+            color: white;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .edit-btn:hover, .delete-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--dark-green);
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--medium-green);
+            box-shadow: 0 0 0 2px rgba(62, 123, 39, 0.2);
+        }
+        .save-btn {
+            background-color: var(--medium-green);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .save-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>User Management</h1>
+        </div>
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- User rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit User</h2>
+            <form id="editUserForm">
+                <input type="hidden" id="editUsername">
+                <div class="form-group">
+                    <label for="editNewUsername">Username</label>
+                    <input type="text" id="editNewUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editRole">Role</label>
+                    <input type="text" id="editRole" readonly>
+                </div>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fetch and display users
+        function loadUsers() {
+            fetch('/api/users')
+                .then(response => response.json())
+                .then(users => {
+                    const tableBody = document.getElementById('userTableBody');
+                    tableBody.innerHTML = '';
+                    
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role}</td>
+                            <td class="action-buttons">
+                                <button class="edit-btn" onclick="openEditModal('${user.username}')">Edit</button>
+                                <button class="delete-btn" onclick="deleteUser('${user.username}')">Delete</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error loading users:', error));
+        }
+
+        // Modal handling
+        const modal = document.getElementById('editModal');
+        const closeBtn = document.getElementsByClassName('close')[0];
+
+        function openEditModal(username) {
+            fetch(`/api/users/${username}`)
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById('editUsername').value = user.username;
+                    document.getElementById('editNewUsername').value = user.username;
+                    document.getElementById('editEmail').value = user.email;
+                    document.getElementById('editRole').value = user.role;
+                    modal.style.display = 'block';
+                })
+                .catch(error => console.error('Error loading user:', error));
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('editUserForm').onsubmit = function(e) {
+            e.preventDefault();
+            const oldUsername = document.getElementById('editUsername').value;
+            const userData = {
+                username: document.getElementById('editNewUsername').value,
+                email: document.getElementById('editEmail').value,
+                role: document.getElementById('editRole').value
+            };
+
+            fetch(`/api/users/${oldUsername}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    modal.style.display = 'none';
+                    loadUsers();
+                } else {
+                    throw new Error('Failed to update user');
+                }
+            })
+            .catch(error => console.error('Error updating user:', error));
+        }
+
+        // Delete user
+        function deleteUser(username) {
+            if (confirm(`Are you sure you want to delete user ${username}?`)) {
+                fetch(`/api/users/${username}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        loadUsers();
+                    } else {
+                        throw new Error('Failed to delete user');
+                    }
+                })
+                .catch(error => console.error('Error deleting user:', error));
+            }
+        }
+
+        // Load users when page loads
+        document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+</body>
+</html> 
