@@ -1,33 +1,17 @@
 package org.example.cart.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-@Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CartItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
     private Product product;
-    
     private int quantity;
     private double price;
 
     public CartItem() {
-    }
-
-    public CartItem(Long id, Product product, int quantity, double price) {
-        this.id = id;
-        this.product = product;
-        this.quantity = quantity;
-        this.price = price;
     }
 
     public Long getId() {
@@ -62,6 +46,7 @@ public class CartItem {
         this.price = price;
     }
 
+    @JsonIgnore
     public double getTotal() {
         return price * quantity;
     }

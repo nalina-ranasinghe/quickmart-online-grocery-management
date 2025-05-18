@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/cart")
-public class cartController {
+public class CartController {
 
     @Autowired
     private CartService cartService;
@@ -44,21 +44,20 @@ public class cartController {
         return "redirect:/cart";
     }
 
-    @PostMapping("/update")
-    public String updateCart(@RequestParam Long itemId, @RequestParam String action) {
-        CartItem item = cartService.getCartItem(itemId);
-        if (item != null) {
-            int newQuantity = item.getQuantity() + (action.equals("increase") ? 1 : -1);
-            if (newQuantity > 0 && newQuantity <= 10) {
-                item.setQuantity(newQuantity);
+    @PostMapping("/update/{itemId}")
+    public String updateCartItem(@PathVariable Long itemId, @RequestParam int quantity) {
+        if (quantity > 0 && quantity <= 10) {
+            CartItem item = cartService.getCartItem(itemId);
+            if (item != null) {
+                item.setQuantity(quantity);
                 cartService.updateCartItem(item);
             }
         }
         return "redirect:/cart";
     }
 
-    @PostMapping("/remove")
-    public String removeFromCart(@RequestParam Long itemId) {
+    @PostMapping("/remove/{itemId}")
+    public String removeFromCart(@PathVariable Long itemId) {
         cartService.removeFromCart(itemId);
         return "redirect:/cart";
     }

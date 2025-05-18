@@ -191,7 +191,9 @@
                 <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post" class="add-to-cart-form">
                     <input type="number" name="quantity" value="1" min="1" th:max="${product.quantity}"
                            class="quantity-input">
-                    <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                    <button type="submit" class="add-to-cart-btn" th:disabled="${product.quantity <= 0}">
+                        <span th:text="${product.quantity > 0 ? 'Add to Cart' : 'Out of Stock'}">Add to Cart</span>
+                    </button>
                 </form>
                 
                 <p class="stock-info" th:text="'In stock: ' + ${product.quantity}">In stock: 0</p>

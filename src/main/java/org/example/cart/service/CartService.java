@@ -2,8 +2,6 @@ package org.example.cart.service;
 
 import org.example.cart.model.Product;
 import org.example.cart.model.CartItem;
-import org.example.cart.repository.CartItemRepository;
-import org.example.cart.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,60 +10,52 @@ import java.util.List;
 public class CartService {
     
     @Autowired
-    private CartItemRepository cartItemRepository;
+    private FileCartService fileCartService;
 
     @Autowired
-    private ProductRepository productRepository;
+    private FileProductService fileProductService;
 
     // Cart Items methods
     public List<CartItem> getAllCartItems() {
-        return cartItemRepository.findAll();
+        return fileCartService.getAllCartItems();
     }
 
     public CartItem addToCart(Long productId, int quantity) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        CartItem cartItem = new CartItem();
-        cartItem.setProduct(product);
-        cartItem.setQuantity(quantity);
-        cartItem.setPrice(product.getPrice());
-
-        return cartItemRepository.save(cartItem);
+        return fileCartService.addToCart(productId, quantity);
     }
 
     public void removeFromCart(Long cartItemId) {
-        cartItemRepository.deleteById(cartItemId);
+        fileCartService.removeFromCart(cartItemId);
     }
 
     public CartItem updateCartItem(CartItem cartItem) {
-        return cartItemRepository.save(cartItem);
+        fileCartService.updateCartItem(cartItem);
+        return cartItem;
     }
 
     public CartItem getCartItem(Long id) {
-        return cartItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+        return fileCartService.getCartItem(id);
     }
 
     // Product methods
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return fileProductService.getAllProducts();
     }
 
     public void addProduct(Product product) {
-        productRepository.save(product);
+        fileProductService.addProduct(product);
     }
 
     public Product getProduct(Long id) {
-        return productRepository.findById(id)
+        return fileProductService.getProduct(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     public void updateProduct(Product product) {
-        productRepository.save(product);
+        fileProductService.updateProduct(product);
     }
 
     public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+        fileProductService.deleteProduct(id);
     }
 }

@@ -14,6 +14,7 @@ public class AdminController {
     @Autowired
     private CartService cartService;
 
+    // List all products (READ)
     @GetMapping("/products")
     public String listProducts(Model model) {
         model.addAttribute("products", cartService.getAllProducts());
@@ -21,19 +22,25 @@ public class AdminController {
         return "admin/products";
     }
 
+    // Add new product (CREATE)
     @PostMapping("/products/add")
     public String addProduct(@ModelAttribute Product product) {
         cartService.addProduct(product);
         return "redirect:/admin/products";
     }
 
+    // Show edit form for product (READ)
     @GetMapping("/products/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
         Product product = cartService.getProduct(id);
+        if (product == null) {
+            throw new RuntimeException("Product not found");
+        }
         model.addAttribute("product", product);
         return "admin/edit-product";
     }
 
+    // Update product (UPDATE)
     @PostMapping("/products/update/{id}")
     public String updateProduct(@PathVariable Long id, @ModelAttribute Product product) {
         product.setId(id);
@@ -41,6 +48,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
+    // Delete product (DELETE)
     @PostMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         cartService.deleteProduct(id);
