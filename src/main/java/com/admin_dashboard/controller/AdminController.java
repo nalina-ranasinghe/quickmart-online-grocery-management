@@ -40,32 +40,28 @@ public class AdminController {
     }
 
     @GetMapping("/home")
-    public String showDashboard() {
+    public String showOverview() {
         return "admin-dashboard";
     }
 
     @GetMapping("/user-management")
     public String showUserManagement() {
-        // In a future implementation, add user data to the model
-        return "admin-dashboard"; // For now, reuse the dashboard template
+        return "user-management";
     }
 
     @GetMapping("/prime-members")
     public String showPrimeMembers() {
-        // In a future implementation, add prime members data to the model
-        return "admin-dashboard"; // For now, reuse the dashboard template
+        return "prime-members";
     }
 
     @GetMapping("/product-management")
     public String showProductManagement() {
-        // In a future implementation, add product data to the model
-        return "admin-dashboard"; // For now, reuse the dashboard template
+        return "product-management";
     }
 
     @GetMapping("/order-overview")
     public String showOrderOverview() {
-        // In a future implementation, add order data to the model
-        return "admin-dashboard"; // For now, reuse the dashboard template
+        return "order-overview";
     }
 
     // Helper method to validate admin credentials from text file
