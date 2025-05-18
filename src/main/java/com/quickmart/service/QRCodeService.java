@@ -1,3 +1,4 @@
+// Link to member details
 package com.quickmart.service;
 
 import com.google.zxing.BarcodeFormat;
