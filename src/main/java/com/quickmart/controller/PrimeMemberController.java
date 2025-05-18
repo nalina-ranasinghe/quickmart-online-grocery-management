@@ -28,17 +28,17 @@ public class PrimeMemberController {
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/prime-members";
+        return "redirect:/admin/prime-members";
     }
 
-    @GetMapping("/prime-members")
+    @GetMapping("/admin/prime-members")
     public String listMembers(Model model) {
         List<PrimeMember> members = primeMemberService.getAllMembers();
         model.addAttribute("members", members);
         return "prime-members";
     }
 
-    @GetMapping("/prime-members/{id}")
+    @GetMapping("/admin/prime-members/{id}")
     public String getMemberDetails(@PathVariable String id, Model model) {
         return primeMemberService.getMemberById(id)
                 .map(member -> {
@@ -50,17 +50,17 @@ public class PrimeMemberController {
                     model.addAttribute("qrCode", qrCode);
                     return "member-details";
                 })
-                .orElse("redirect:/prime-members");
+                .orElse("redirect:/admin/prime-members");
     }
 
-    @GetMapping("/prime-members/add")
+    @GetMapping("/admin/prime-members/add")
     public String showAddMemberForm(Model model) {
         model.addAttribute("member", new PrimeMember());
         model.addAttribute("isNew", true);
         return "member-form";
     }
 
-    @GetMapping("/prime-members/edit/{id}")
+    @GetMapping("/admin/prime-members/edit/{id}")
     public String showEditMemberForm(@PathVariable String id, Model model) {
         return primeMemberService.getMemberById(id)
                 .map(member -> {
@@ -68,10 +68,10 @@ public class PrimeMemberController {
                     model.addAttribute("isNew", false);
                     return "member-form";
                 })
-                .orElse("redirect:/prime-members");
+                .orElse("redirect:/admin/prime-members");
     }
 
-    @PostMapping("/prime-members/save")
+    @PostMapping("/admin/prime-members/save")
     public String saveMember(@Valid @ModelAttribute PrimeMember member, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("isNew", member.getId() == null);
@@ -88,17 +88,17 @@ public class PrimeMemberController {
             model.addAttribute("isNew", member.getId() == null);
             return "member-form";
         }
-        return "redirect:/prime-members";
+        return "redirect:/admin/prime-members";
     }
 
-    @GetMapping("/prime-members/delete/{id}")
+    @GetMapping("/admin/prime-members/delete/{id}")
     public String deleteMember(@PathVariable String id) {
         primeMemberService.deleteMember(id);
-        return "redirect:/prime-members";
+        return "redirect:/admin/prime-members";
     }
 
     // API Endpoints for AJAX calls
-    @GetMapping("/prime-members/api/list")
+    @GetMapping("/admin/prime-members/api/list")
     @ResponseBody
     public List<PrimeMember> apiListMembers() {
         return primeMemberService.getAllMembers();

@@ -19,62 +19,203 @@
             --light-green: #85A947;
             --cream: #EFE3C2;
             --off-white: #F8F9FA;
+            --gold-gradient: linear-gradient(90deg, #FFD700 0%, #FFFACD 100%);
+            --silver-gradient: linear-gradient(90deg, #C0C0C0 0%, #F8F9FA 100%);
+            --platinum-gradient: linear-gradient(90deg, #E5E4E2 0%, #F8F9FA 100%);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--off-white);
-            color: var(--dark-green);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e6f2e6 100%);
+            color: #123523;
+            /* More visible SVG mesh wallpaper */
+            background-image: url('data:image/svg+xml;utf8,<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="40" cy="40" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="10" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/></svg>');
+            background-repeat: repeat;
+            background-size: 80px 80px;
         }
 
+        /* Animated Gradient Navbar */
         .navbar {
-            background-color: var(--dark-green);
+            background: linear-gradient(270deg, #123523, #3E7B27, #85A947, #123523);
+            background-size: 600% 600%;
+            animation: navbarGradientMove 12s ease infinite;
+            box-shadow: 0 4px 18px 0 rgba(18,53,35,0.10);
+            border-radius: 0 0 18px 18px;
+        }
+        @keyframes navbarGradientMove {
+            0% {background-position:0% 50%}
+            50% {background-position:100% 50%}
+            100% {background-position:0% 50%}
+        }
+        .navbar .navbar-brand img {
+            max-height: 48px;
+            filter: drop-shadow(0 2px 6px rgba(62,123,39,0.12));
+        }
+        .navbar-nav .nav-link {
+            color: #EFE3C2 !important;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            padding: 0.5rem 1.2rem;
+        }
+        .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
+            background: linear-gradient(90deg, #3E7B27 60%, #85A947 100%);
+            color: #fff !important;
+            box-shadow: 0 2px 12px 0 rgba(62,123,39,0.18);
         }
 
-        .navbar-brand img {
-            max-height: 40px;
+        /* Main Content Area with SVG Texture Overlay */
+        .main-content-gradient {
+            position: relative;
+            background: linear-gradient(120deg, #f8f9fa 60%, #e6f2e6 100%);
+            border-radius: 18px;
+            box-shadow: 0 6px 32px 0 rgba(18,53,35,0.07);
+            padding: 32px 24px 24px 24px;
+            min-height: 100vh;
+            overflow: hidden;
+            /* Add mesh pattern to main content as well */
+            background-image: url('data:image/svg+xml;utf8,<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="40" cy="40" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="10" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/></svg>');
+            background-repeat: repeat;
+            background-size: 80px 80px;
         }
+        .main-content-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.18;
+            background: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="2" fill="%2385A947" fill-opacity="0.18"/></svg>');
+        }
+        .main-content-gradient > * { position: relative; z-index: 1; }
 
+        /* Card Buttering - Glassmorphism & Glow */
         .card {
-            border-radius: 15px;
+            border-radius: 18px;
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(18,53,35,0.16);
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(6px) saturate(1.2);
+            transition: box-shadow 0.2s, transform 0.2s;
         }
-
+        .card:hover {
+            box-shadow: 0 12px 40px 0 rgba(62,123,39,0.22), 0 0 16px 2px #85A94733;
+            transform: translateY(-2px) scale(1.01);
+        }
         .card-header {
-            background-color: var(--medium-green);
-            color: white;
-            border-radius: 15px 15px 0 0 !important;
+            background: linear-gradient(90deg, #3E7B27 60%, #85A947 100%);
+            color: white !important;
+            border-radius: 18px 18px 0 0 !important;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 8px 0 rgba(62,123,39,0.08);
+            border-bottom: 4px solid transparent;
+            border-image: linear-gradient(90deg, #FFD700, #3E7B27, #85A947) 1;
         }
 
-        .btn-primary {
-            background-color: var(--medium-green);
-            border-color: var(--medium-green);
+        /* Tier Badges */
+        .tier-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            background: var(--cream);
+            color: var(--dark-green);
+            box-shadow: 0 2px 8px 0 rgba(62,123,39,0.08);
+            border: 2px solid #fff;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .tier-silver {
+            background: var(--silver-gradient);
+            color: #333;
+            border: 2px solid #C0C0C0;
+        }
+        .tier-gold {
+            background: var(--gold-gradient);
+            color: #333;
+            border: 2px solid #FFD700;
+        }
+        .tier-platinum {
+            background: var(--platinum-gradient);
+            color: #333;
+            border: 2px solid #E5E4E2;
+        }
+        .tier-badge:hover {
+            box-shadow: 0 0 12px 2px #FFD70055, 0 2px 8px 0 rgba(62,123,39,0.12);
+            border-color: #85A947;
         }
 
-        .btn-primary:hover {
-            background-color: var(--dark-green);
-            border-color: var(--dark-green);
+        /* Buttons - Glow on Hover */
+        .btn-primary, .btn-success {
+            transition: box-shadow 0.2s, background 0.2s;
         }
-
-        .btn-success {
-            background-color: var(--light-green);
-            border-color: var(--light-green);
+        .btn-primary:hover, .btn-success:hover {
+            box-shadow: 0 0 16px 2px #3E7B2777, 0 2px 8px 0 rgba(62,123,39,0.18);
         }
-
-        .btn-success:hover {
-            background-color: var(--medium-green);
-            border-color: var(--medium-green);
-        }
-
-        .btn-outline-success {
-            color: var(--medium-green);
-            border-color: var(--medium-green);
-        }
-
         .btn-outline-success:hover {
-            background-color: var(--medium-green);
-            color: white;
+            box-shadow: 0 0 12px 2px #85A94755;
+        }
+
+        /* Section Titles - Gradient Border */
+        h2, h5, h4, h3 {
+            background: linear-gradient(90deg, #3E7B27 60%, #85A947 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #FFD700, #3E7B27, #85A947) 1;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+        h3, h4, h5, h6 {
+            color: #123523 !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
+        }
+        /* Subtle text shadow for text on gradients */
+        .main-content-gradient h2, .main-content-gradient h3.page-title {
+            text-shadow: 0 2px 8px rgba(255,255,255,0.12);
+        }
+
+        /* Feature Cards - Animated Icon Color Shift */
+        .feature-card {
+            background: linear-gradient(120deg, #EFE3C2 60%, #F8F9FA 100%);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            text-align: center;
+            box-shadow: 0 2px 8px 0 rgba(62,123,39,0.08);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 24px 0 rgba(62,123,39,0.13), 0 0 16px 2px #FFD70033;
+        }
+        .feature-card i {
+            font-size: 38px;
+            color: var(--medium-green);
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #3E7B27 60%, #FFD700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: background 0.5s;
+        }
+        .feature-card:hover i {
+            background: linear-gradient(90deg, #FFD700 60%, #3E7B27 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Stats Box */
+        .stats-box {
+            background: rgba(255,255,255,0.92);
+            border-left: 6px solid var(--medium-green);
+            padding: 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(62,123,39,0.08);
+            margin-bottom: 22px;
         }
 
         .table {
@@ -96,28 +237,6 @@
             color: var(--dark-green);
         }
 
-        .tier-badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .tier-silver {
-            background-color: #C0C0C0;
-            color: #333;
-        }
-
-        .tier-gold {
-            background-color: #FFD700;
-            color: #333;
-        }
-
-        .tier-platinum {
-            background-color: #E5E4E2;
-            color: #333;
-        }
-
         .search-container {
             background-color: var(--cream);
             border-radius: 10px;
@@ -136,32 +255,64 @@
             margin-bottom: 20px;
         }
 
-        .feature-card {
-            background-color: var(--cream);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            text-align: center;
+        /* Restore solid text color for most text */
+        .main-content-gradient, .card, .stats-box, .feature-card, .table, .card-body, .card-header, .btn, .form-label, .breadcrumb, .navbar-nav .nav-link {
+            color: #123523 !important;
+            text-shadow: none !important;
         }
-
+        .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
+            color: #fff !important;
+            text-shadow: 0 1px 4px rgba(18,53,35,0.10);
+        }
+        .card-header, .btn-primary, .btn-success {
+            color: #fff !important;
+            text-shadow: 0 1px 4px rgba(18,53,35,0.10);
+        }
         .feature-card i {
-            font-size: 36px;
-            color: var(--medium-green);
-            margin-bottom: 10px;
+            text-shadow: 0 1px 4px rgba(18,53,35,0.10);
         }
-
-        .stats-box {
-            background-color: white;
-            border-left: 5px solid var(--medium-green);
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+        /* Table header text */
+        .table th {
+            color: #123523 !important;
+            background-color: var(--cream);
+        }
+        /* Table body text */
+        .table td {
+            color: #222 !important;
+            background: rgba(255,255,255,0.95);
+        }
+        /* Breadcrumbs */
+        .breadcrumb {
+            background: transparent;
+            color: #3E7B27;
+        }
+        /* Card backgrounds more opaque for clarity */
+        .card, .stats-box, .feature-card {
+            background: rgba(255,255,255,0.97) !important;
+        }
+        /* Only keep gradient text for large headers */
+        h2, h3.page-title, h1.page-title {
+            background: linear-gradient(90deg, #3E7B27 60%, #85A947 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #FFD700, #3E7B27, #85A947) 1;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+        h3, h4, h5, h6 {
+            color: #123523 !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
+        }
+        /* Subtle text shadow for text on gradients */
+        .main-content-gradient h2, .main-content-gradient h3.page-title {
+            text-shadow: 0 2px 8px rgba(255,255,255,0.12);
         }
     </style>
 </head>
 <body>
-<!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
@@ -173,7 +324,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/prime-members"><i class="fas fa-users"></i> Prime Members</a>
+                    <a class="nav-link active" href="/admin/prime-members"><i class="fas fa-users"></i> Prime Members</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Products</a>
@@ -186,14 +337,17 @@
     </div>
 </nav>
 
-<!-- Main Content -->
-<div class="container my-4">
+<!-- Sidebar Include -->
+<div th:replace="sidebar :: sidebar"></div>
+
+<!-- Main Content Wrapper -->
+<div class="main-content-gradient" style="margin-left:18rem;">
     <div class="row">
         <div class="col-md-8">
             <h2 class="mb-4"><i class="fas fa-crown me-2"></i>Prime Members Management</h2>
         </div>
         <div class="col-md-4 text-end">
-            <a href="/prime-members/add" class="btn btn-primary">
+            <a href="/admin/prime-members/add" class="btn btn-primary">
                 <i class="fas fa-plus-circle me-1"></i> Add Prime Member
             </a>
         </div>
@@ -251,13 +405,13 @@
                         <td th:text="${member.points}">Points</td>
                         <td th:text="${member.tier}">Tier</td>
                         <td>
-                            <a th:href="@{/prime-members/{id}(id=${member.id})}" class="btn btn-sm btn-outline-success me-1">
+                            <a th:href="@{/admin/prime-members/{id}(id=${member.id})}" class="btn btn-sm btn-outline-success me-1">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a th:href="@{/prime-members/edit/{id}(id=${member.id})}" class="btn btn-sm btn-outline-primary me-1">
+                            <a th:href="@{/admin/prime-members/edit/{id}(id=${member.id})}" class="btn btn-sm btn-outline-primary me-1">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a th:href="@{/prime-members/delete/{id}(id=${member.id})}" class="btn btn-sm btn-outline-danger">
+                            <a th:href="@{/admin/prime-members/delete/{id}(id=${member.id})}" class="btn btn-sm btn-outline-danger">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </td>
@@ -292,6 +446,7 @@
         </div>
     </div>
 </div>
+<!-- End Main Content Wrapper -->
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
@@ -321,7 +476,7 @@
     // Delete confirmation
     function confirmDelete(id, name) {
         document.getElementById('memberName').textContent = name;
-        document.getElementById('confirmDeleteBtn').href = `/prime-members/delete/${id}`;
+        document.getElementById('confirmDeleteBtn').href = `/admin/prime-members/delete/${id}`;
 
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         deleteModal.show();
@@ -329,7 +484,7 @@
 
     // Load stats
     function loadStats() {
-        fetch('/prime-members/api/list')
+        fetch('/admin/prime-members/api/list')
             .then(response => response.json())
             .then(members => {
                 // Total members

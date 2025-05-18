@@ -1,0 +1,221 @@
+<aside class="sidebar" th:fragment="sidebar">
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 18rem;
+            background: linear-gradient(160deg, #123523 70%, #3E7B27 100%);
+            color: #fff;
+            z-index: 50;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 8px rgba(18,53,35,0.08);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Allow vertical scrolling */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        .sidebar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        .sidebar .brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.2rem 0 1.2rem 0;
+        }
+        .sidebar .brand img {
+            max-width: 150px;
+            max-height: 150px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+        .admin-profile-card {
+            background: rgba(255,255,255,0.07);
+            border-radius: 1rem;
+            padding: 1.5rem 1rem 1rem 1rem;
+            margin: 0 1.5rem 1.5rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px 0 rgba(18,53,35,0.04);
+        }
+        .admin-profile-card .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin: 0 auto 0.5rem auto;
+            box-shadow: 0 2px 8px 0 rgba(18,53,35,0.08);
+        }
+        .admin-profile-card .name {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .admin-profile-card .role {
+            color: #EFE3C2;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .admin-profile-card .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #3E7B27;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            padding: 0.25rem 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .sidebar-divider {
+            height: 1px;
+            background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.25), rgba(255,255,255,0));
+            margin: 1.2rem 1.5rem 1.5rem 1.5rem;
+        }
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 1.1rem 2rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 0.8rem;
+            margin: 0.2rem 1.2rem;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            position: relative;
+            font-size: 1.13rem;
+            letter-spacing: 0.01em;
+        }
+        .sidebar-link i {
+            min-width: 24px;
+            margin-right: 16px;
+            font-size: 1.25rem;
+        }
+        .sidebar-link:hover {
+            background: #3E7B27;
+            color: #EFE3C2;
+            transform: translateX(5px);
+        }
+        .sidebar-link.active {
+            background: #3E7B27;
+            color: #EFE3C2;
+        }
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: #85A947;
+            border-radius: 4px 0 0 4px;
+        }
+        .sidebar .logout {
+            margin-top: auto;
+            margin-bottom: 2rem;
+            padding: 0 1.2rem;
+        }
+        .sidebar .logout .sidebar-link {
+            background: #fff;
+            color: #3E7B27;
+            font-weight: 600;
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 8px 0 rgba(18,53,35,0.08);
+            justify-content: center;
+            padding: 1.1rem 0;
+            border: 1.5px solid #E5E7EB;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        .sidebar .logout .sidebar-link:hover {
+            background: #FEE2E2;
+            color: #B91C1C;
+            border: 1.5px solid #FCA5A5;
+        }
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+            .brand,
+            .admin-profile-card .name,
+            .admin-profile-card .role,
+            .admin-profile-card .status-badge,
+            .sidebar-link span {
+                display: none;
+            }
+            .sidebar-link {
+                justify-content: center;
+                padding: 0.75rem;
+            }
+            .sidebar-link i {
+                margin-right: 0;
+                font-size: 1.25rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+    </style>
+    <div class="brand">
+        <img src="/images/QUICKMART_logo.png" alt="Quickmart Logo">
+    </div>
+    <div class="admin-profile-card">
+        <img src="https://ui-avatars.com/api/?name=Admin+User&background=3E7B27&color=fff" alt="Admin Avatar" class="avatar">
+        <div class="name">Admin User</div>
+        <div class="role">System Administrator</div>
+        <div class="status-badge"><i class="fas fa-circle mr-2 text-green-400"></i>Online</div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <nav class="sidebar-nav">
+        <a href="/admin/home" class="sidebar-link"><i class="fas fa-chart-line"></i> <span>Overview</span></a>
+        <a href="/admin/user-management" class="sidebar-link"><i class="fas fa-users-cog"></i> <span>User Management</span></a>
+        <a href="/admin/prime-members" class="sidebar-link"><i class="fas fa-crown"></i> <span>Prime Members</span></a>
+        <a href="/admin/product-management" class="sidebar-link"><i class="fas fa-box"></i> <span>Product Management</span></a>
+        <a href="/admin/order-overview" class="sidebar-link"><i class="fas fa-shopping-cart"></i> <span>Order Overview</span></a>
+    </nav>
+    <div class="logout">
+        <a href="/admin/logout" class="sidebar-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+    </div>
+    <script>
+        // Sidebar JS: Mobile toggle and active link
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                });
+            }
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 && 
+                    sidebar &&
+                    !sidebar.contains(e.target) && 
+                    (!mobileToggle || !mobileToggle.contains(e.target)) && 
+                    sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                }
+            });
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</aside> 

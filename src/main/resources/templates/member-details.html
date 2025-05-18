@@ -23,8 +23,12 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--off-white);
-            color: var(--dark-green);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e6f2e6 100%);
+            color: #123523;
+            /* More visible SVG mesh wallpaper */
+            background-image: url('data:image/svg+xml;utf8,<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="40" cy="40" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="10" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/></svg>');
+            background-repeat: repeat;
+            background-size: 80px 80px;
         }
 
         .navbar {
@@ -207,6 +211,10 @@
             top: 15px;
             right: 15px;
         }
+
+        @media (min-width: 993px) {
+            footer { margin-left: 0 !important; }
+        }
     </style>
 </head>
 <body>
@@ -222,7 +230,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/prime-members"><i class="fas fa-users"></i> Prime Members</a>
+                    <a class="nav-link active" href="/admin/prime-members"><i class="fas fa-users"></i> Prime Members</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Products</a>
@@ -239,7 +247,7 @@
 <div class="container my-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/prime-members" class="text-decoration-none">Prime Members</a></li>
+            <li class="breadcrumb-item"><a href="/admin/prime-members" class="text-decoration-none">Prime Members</a></li>
             <li class="breadcrumb-item active" th:text="${member.name}">Member Details</li>
         </ol>
     </nav>
@@ -251,7 +259,7 @@
                 <!-- Member Header with Basic Info -->
                 <div class="detail-header text-center position-relative">
                     <div class="action-buttons">
-                        <a th:href="@{/prime-members/edit/{id}(id=${member.id})}" class="btn btn-sm btn-primary me-1">
+                        <a th:href="@{/admin/prime-members/edit/{id}(id=${member.id})}" class="btn btn-sm btn-primary me-1">
                             <i class="fas fa-edit"></i> Edit
                         </a>
                         <a href="#" onclick="confirmDelete()" class="btn btn-sm btn-danger">
@@ -490,7 +498,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a th:href="@{/prime-members/delete/{id}(id=${member.id})}" class="btn btn-danger">Delete</a>
+                <a th:href="@{/admin/prime-members/delete/{id}(id=${member.id})}" class="btn btn-danger">Delete</a>
             </div>
         </div>
     </div>
