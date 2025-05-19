@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Mart - Fresh Groceries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --off-white: #f8faf7;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--off-white);
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .greenhouse-gradient {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-green) 50%, var(--medium-green) 100%);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sort-btn.active {
+            background-color: var(--medium-green);
+            color: white;
+        }
+        
+        .admin-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .product-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .edit-btn {
+            background-color: #ffc107;
+        }
+        
+        .delete-btn {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="greenhouse-gradient shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="/QUICKMART_logo.png" alt="Logo" class="h-10">
+                    <h1 class="title-font text-3xl font-bold text-[#123523]"></h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/admin.html" class="bg-[#3E7B27] hover:bg-[#123523] text-white px-4 py-2 rounded-full flex items-center">
+                        <i class="fas fa-cog mr-2"></i>
+                        <span>Manage Products</span>
+                    </a>
+                    <button class="bg-[#3E7B27] hover:bg-[#123523] text-white px-4 py-2 rounded-full flex items-center">
+                        <i class="fas fa-shopping-cart mr-2"></i>
+                        <span>Cart</span>
+                        <span id="cart-count" class="ml-2 bg-white text-[#3E7B27] rounded-full w-6 h-6 flex items-center justify-center text-sm">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Category Filter -->
+        <div class="mb-8">
+            <h2 class="title-font text-2xl font-semibold text-[#123523] mb-4">Our Fresh Products</h2>
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button class="category-filter px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2] active" data-category="all">All Products</button>
+                <button class="category-filter px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-category="Fresh Produce">Fresh Produce</button>
+                <button class="category-filter px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-category="Dairy & Eggs">Dairy & Eggs</button>
+                <button class="category-filter px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-category="Meat & Seafood">Meat & Seafood</button>
+                <button class="category-filter px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-category="Pantry Staples">Pantry Staples</button>
+                <button class="category-filter px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-category="Snacks & Beverages">Snacks & Beverages</button>
+            </div>
+            
+            <!-- Sort Controls -->
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-gray-600">
+                    <span id="product-count">0</span> products available
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#123523] text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="title-font text-xl font-semibold mb-4">Quick Mart</h3>
+                    <p class="text-[#EFE3C2]">Your neighborhood grocery store with the freshest produce and highest quality products at affordable prices.</p>
+                </div>
+                <div>
+                    <h3 class="title-font text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-[#EFE3C2] hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-[#EFE3C2] hover:text-white">Delivery Information</a></li>
+                        <li><a href="#" class="text-[#EFE3C2] hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-[#EFE3C2] hover:text-white">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="title-font text-xl font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#85A947]"></i> <span class="text-[#EFE3C2]">Kandy Sri Lanka</span></li>
+                        <li class="flex items-center"><i class="fas fa-phone mr-2 text-[#85A947]"></i> <span class="text-[#EFE3C2]">0716668925</span></li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2 text-[#85A947]"></i> <span class="text-[#EFE3C2]">info@quickmart.com</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-[#3E7B27] mt-8 pt-6 text-center text-[#85A947]">
+                <p>&copy; 2025 Quick Mart Grocery Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Cart state
+        let cart = [];
+        let products = [];
+        
+        // DOM elements
+        const productGrid = document.getElementById('product-grid');
+        const cartCount = document.getElementById('cart-count');
+        const productCount = document.getElementById('product-count');
+        const categoryFilters = document.querySelectorAll('.category-filter');
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadProducts();
+            updateProductCount(products.length);
+            
+            // Set up event listeners
+            categoryFilters.forEach(button => {
+                button.addEventListener('click', filterProductsByCategory);
+            });
+        });
+
+        // Load products from API
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                products = await response.json();
+                renderProducts(products);
+            } catch (error) {
+                console.error('Error loading products:', error);
+                products = [];
+                renderProducts([]);
+            }
+        }
+        
+        // Render products to the page
+        function renderProducts(productsToRender) {
+            productGrid.innerHTML = '';
+            
+            productsToRender.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:shadow-lg';
+                productCard.innerHTML = `
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                        <div class="absolute top-2 right-2 bg-[#3E7B27] text-white text-xs px-2 py-1 rounded-full">$${product.price.toFixed(2)}</div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-semibold text-[#123523]">${product.name}</h3>
+                                <p class="text-sm text-gray-500">${product.category}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <button class="add-to-cart bg-[#EFE3C2] hover:bg-[#85A947] text-[#123523] px-3 py-1 rounded-full text-sm flex items-center" data-id="${product.id}">
+                                <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+            
+            // Add event listeners to the new "Add to Cart" buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', addToCart);
+            });
+        }
+        
+        // Filter products by category
+        function filterProductsByCategory(e) {
+            const category = e.target.dataset.category;
+            
+            // Update active state of filter buttons
+            categoryFilters.forEach(button => {
+                button.classList.remove('active', 'bg-[#3E7B27]', 'text-white');
+                button.classList.add('border', 'border-[#85A947]', 'hover:bg-[#EFE3C2]');
+            });
+            
+            e.target.classList.add('active', 'bg-[#3E7B27]', 'text-white');
+            e.target.classList.remove('border', 'border-[#85A947]', 'hover:bg-[#EFE3C2]');
+            
+            let filteredProducts;
+            if (category === 'all') {
+                filteredProducts = products;
+            } else {
+                filteredProducts = products.filter(product => product.category === category);
+            }
+            
+            renderProducts(filteredProducts);
+            updateProductCount(filteredProducts.length);
+        }
+        
+        // Add product to cart
+        function addToCart(e) {
+            const productId = parseInt(e.target.dataset.id);
+            const product = products.find(p => p.id === productId);
+            
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            
+            // Visual feedback
+            e.target.innerHTML = '<i class="fas fa-check mr-1"></i> Added!';
+            e.target.classList.remove('bg-[#EFE3C2]', 'hover:bg-[#85A947]', 'text-[#123523]');
+            e.target.classList.add('bg-[#3E7B27]', 'text-white');
+            
+            setTimeout(() => {
+                e.target.innerHTML = '<i class="fas fa-cart-plus mr-1"></i> Add to Cart';
+                e.target.classList.remove('bg-[#3E7B27]', 'text-white');
+                e.target.classList.add('bg-[#EFE3C2]', 'hover:bg-[#85A947]', 'text-[#123523]');
+            }, 1500);
+        }
+        
+        // Update cart count
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+        }
+        
+        // Update product count display
+        function updateProductCount(count) {
+            productCount.textContent = count;
+        }
+    </script>
+</body>
+</html> 
