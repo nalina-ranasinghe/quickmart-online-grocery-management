@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WelcomeController {
 
-    @GetMapping("/")
-    public String welcome() {
-        return "redirect:/admin/login";
-    }
+//    @GetMapping("/")
+//    public String welcome() {
+//        return "redirect:/admin/login";
+//    }
     
     @GetMapping("/admin")
     public String adminHome() {
