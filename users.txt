@@ -1,1 +1,3 @@
 ramitha,123654,ramithamanila2003@gmail.com,null,USER
+Nalina,Nalina123#,nkranasinghe27@gmail.com,null,USER
+Hiran,hiran123#,pasinduhiran13@gmail.com,,USER

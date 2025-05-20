@@ -1,4 +1,4 @@
-package com.grocery.order.model;
+package com.quickmart.product.model;
 
 import lombok.Data;
 import java.io.Serializable;

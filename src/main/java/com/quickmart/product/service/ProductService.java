@@ -1,6 +1,6 @@
-package com.grocery.order.service;
+package com.quickmart.product.service;
 
-import com.grocery.order.model.Product;
+import com.quickmart.product.model.Product;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;

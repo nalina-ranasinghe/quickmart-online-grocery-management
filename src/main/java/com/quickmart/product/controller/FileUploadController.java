@@ -1,4 +1,4 @@
-package com.grocery.order.controller;
+package com.quickmart.product.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

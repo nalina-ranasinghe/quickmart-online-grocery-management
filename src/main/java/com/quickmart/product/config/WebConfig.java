@@ -1,4 +1,4 @@
-package com.grocery.order.config;
+package com.quickmart.product.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -28,24 +28,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + uploadAbsolutePath + "/")
                 .setCachePeriod(3600)
                 .resourceChain(true);
-
-        // Handle all other static resources
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver() {
-                    @Override
-                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                        Resource requestedResource = location.createRelative(resourcePath);
-                        return requestedResource.exists() && requestedResource.isReadable() ? requestedResource
-                                : new ClassPathResource("/static/index.html");
-                    }
-                });
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.html");
-        registry.addViewController("/admin").setViewName("forward:/admin.html");
+        registry.addViewController("/").setViewName("forward:/templates/index.html");
+        registry.addViewController("/Admin-Login").setViewName("forward:/admin.html");
     }
 } 

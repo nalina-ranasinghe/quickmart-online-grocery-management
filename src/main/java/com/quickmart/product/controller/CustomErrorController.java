@@ -1,4 +1,4 @@
-package com.grocery.order.controller;
+package com.quickmart.product.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

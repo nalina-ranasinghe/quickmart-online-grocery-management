@@ -26,7 +26,7 @@ public class AuthController {
     @GetMapping("/login")
     public String loginPage(HttpSession session) {
         if (session.getAttribute("user") != null) {
-            return "redirect:/dashboard";
+            return "redirect:/store/products"; // Updated path
         }
         return "login";
     }
@@ -34,24 +34,23 @@ public class AuthController {
     @GetMapping("/register")
     public String registerPage(HttpSession session) {
         if (session.getAttribute("user") != null) {
-            return "redirect:/dashboard";
+            return "redirect:/store/products"; // Updated path
         }
         return "register";
     }
 
     @PostMapping("/register")
     public String registerUser(@RequestParam String username,
-                             @RequestParam String password,
-                             @RequestParam String email,
-                             Model model) {
+                               @RequestParam String password,
+                               @RequestParam String email,
+                               Model model) {
         System.out.println("=== Registration Attempt ===");
         System.out.println("Username: [" + username + "]");
         System.out.println("Password length: " + password.length());
         System.out.println("Email: [" + email + "]");
-        
-        // List current users for debugging
+
         userService.listAllUsers();
-        
+
         User user = new User(username, password, email, "");
         if (userService.registerUser(user)) {
             System.out.println("Registration successful for: " + username);
@@ -65,29 +64,27 @@ public class AuthController {
 
     @PostMapping("/login")
     public String loginUser(@RequestParam String username,
-                          @RequestParam String password,
-                          Model model,
-                          HttpSession session) {
+                            @RequestParam String password,
+                            Model model,
+                            HttpSession session) {
         System.out.println("=== Login Attempt ===");
         System.out.println("Username/Email: [" + username + "]");
         System.out.println("Password length: " + password.length());
-        
-        // Check if users.txt exists
+
         File userFile = new File("users.txt");
         if (!userFile.exists()) {
             System.out.println("Error: users.txt file does not exist");
             model.addAttribute("error", "System error: User database not found");
             return "login";
         }
-        
-        // List current users for debugging
+
         userService.listAllUsers();
-        
+
         User user = userService.authenticateUser(username, password);
         if (user != null) {
             System.out.println("Login successful for: " + username);
             session.setAttribute("user", user);
-            return "redirect:/dashboard";
+            return "redirect:/store/products"; // Updated path
         } else {
             System.out.println("Login failed for: " + username);
             model.addAttribute("error", "Invalid username or password");
@@ -101,11 +98,11 @@ public class AuthController {
         return "redirect:/login?logout";
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
+    @GetMapping("/store/products") // Updated path to be more specific
+    public String products(HttpSession session) {
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
         }
-        return "dashboard";
+        return "products";
     }
-} 
+}

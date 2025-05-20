@@ -85,6 +85,47 @@
         .delete-btn {
             background-color: #dc3545;
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleGlow {
+            0% { opacity: 0; transform: scale(0.7); text-shadow: none; }
+            60% { opacity: 1; transform: scale(1.1); text-shadow: 0 0 24px #EFE3C2, 0 0 8px #85A947; }
+            100% { opacity: 1; transform: scale(1); text-shadow: 0 0 12px #EFE3C2, 0 0 4px #85A947; }
+        }
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .animate-fadeIn { animation: fadeIn 1s ease; }
+        .animate-slideIn { animation: slideIn 1s 0.2s both; }
+        .animate-scaleGlow { animation: scaleGlow 1.2s 0.7s both; }
+        .animate-bgMove { animation: bgMove 3s linear infinite alternate; background-size: 200% 200%; }
+        
+        #welcome-overlay.fade-out {
+            opacity: 0;
+            transform: scale(0.96);
+            transition: opacity 0.7s, transform 0.7s;
+        }
+        
+        .welcome-box {
+            box-shadow: 0 8px 40px 0 rgba(30,60,30,0.25), 0 1.5px 8px 0 rgba(133,169,71,0.10);
+            border-radius: 2rem;
+            min-width: 260px;
+            max-width: 90vw;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .welcome-title { font-size: 2rem; }
+            .welcome-brand { font-size: 2.5rem; }
+            .welcome-box { padding: 2rem 1rem; }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -97,7 +138,7 @@
                     <h1 class="title-font text-3xl font-bold text-[#123523]"></h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="/admin.html" class="bg-[#3E7B27] hover:bg-[#123523] text-white px-4 py-2 rounded-full flex items-center">
+                    <a href="#" class="bg-[#3E7B27] hover:bg-[#123523] text-white px-4 py-2 rounded-full flex items-center">
                         <i class="fas fa-cog mr-2"></i>
                         <span>Manage Products</span>
                     </a>
@@ -171,6 +212,10 @@
         </div>
     </footer>
 
+    <div id="welcome-overlay" class="fixed inset-0 flex items-center justify-center bg-[#123523] bg-opacity-90 z-50 transition-opacity duration-700 opacity-0 pointer-events-none">
+        <h1 class="text-5xl md:text-6xl font-bold text-white title-font animate-fadeIn">Welcome to <span class="text-[#85A947]">QUICKMART</span></h1>
+    </div>
+
     <script>
         // Cart state
         let cart = [];
@@ -181,22 +226,34 @@
         const cartCount = document.getElementById('cart-count');
         const productCount = document.getElementById('product-count');
         const categoryFilters = document.querySelectorAll('.category-filter');
+        const welcomeOverlay = document.getElementById('welcome-overlay');
         
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadProducts();
-            updateProductCount(products.length);
-            
-            // Set up event listeners
-            categoryFilters.forEach(button => {
-                button.addEventListener('click', filterProductsByCategory);
-            });
+        // Show welcome overlay, then load products
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fade in overlay
+            welcomeOverlay.style.opacity = '1';
+            welcomeOverlay.style.pointerEvents = 'auto';
+            setTimeout(() => {
+                // Fade out overlay
+                welcomeOverlay.style.opacity = '0';
+                welcomeOverlay.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    welcomeOverlay.style.display = 'none';
+                    // Now load products and set up listeners
+                    loadProducts().then(() => {
+                        updateProductCount(products.length);
+                        categoryFilters.forEach(button => {
+                            button.addEventListener('click', filterProductsByCategory);
+                        });
+                    });
+                }, 700); // match transition duration
+            }, 2000); // show for 2 seconds
         });
 
         // Load products from API
         async function loadProducts() {
             try {
-                const response = await fetch('/api/products');
+                const response = await fetch('/products/api');
                 products = await response.json();
                 renderProducts(products);
             } catch (error) {

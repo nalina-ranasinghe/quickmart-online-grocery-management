@@ -1,1 +1,178 @@
-[]
+[
+  {
+    "id": 1,
+    "name": "Bananas",
+    "category": "Fresh Produce",
+    "subcategory": "Fruits",
+    "price": 1.5,
+    "image": "/images/bananas.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Carrots",
+    "category": "Fresh Produce",
+    "subcategory": "Vegetables",
+    "price": 0.99,
+    "image": "/images/carrots.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Mint Leaves",
+    "category": "Fresh Produce",
+    "subcategory": "Herbs",
+    "price": 1.2,
+    "image": "/images/mint.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Whole Milk",
+    "category": "Dairy & Eggs",
+    "subcategory": "Milk",
+    "price": 2.4,
+    "image": "/images/milk.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Cheddar Cheese",
+    "category": "Dairy & Eggs",
+    "subcategory": "Cheese",
+    "price": 3.8,
+    "image": "/images/cheese.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Salted Butter",
+    "category": "Dairy & Eggs",
+    "subcategory": "Butter",
+    "price": 2.99,
+    "image": "/images/butter.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Greek Yogurt",
+    "category": "Dairy & Eggs",
+    "subcategory": "Yogurt",
+    "price": 1.75,
+    "image": "/images/yogurt.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Brown Eggs (6 pack)",
+    "category": "Dairy & Eggs",
+    "subcategory": "Eggs",
+    "price": 2.5,
+    "image": "/images/eggs.jpg"
+  },
+  {
+    "id": 9,
+    "name": "Chicken Breast",
+    "category": "Meat & Seafood",
+    "subcategory": "Fresh Meat",
+    "price": 5.99,
+    "image": "/images/chicken.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Salmon Fillet",
+    "category": "Meat & Seafood",
+    "subcategory": "Seafood",
+    "price": 8.49,
+    "image": "/images/salmon.jpg"
+  },
+  {
+    "id": 11,
+    "name": "Smoked Ham",
+    "category": "Meat & Seafood",
+    "subcategory": "Deli items",
+    "price": 4.3,
+    "image": "/images/ham.jpg"
+  },
+  {
+    "id": 12,
+    "name": "Frozen Beef Mince",
+    "category": "Meat & Seafood",
+    "subcategory": "Frozen Meat",
+    "price": 6.2,
+    "image": "/images/frozen-beef.jpg"
+  },
+  {
+    "id": 13,
+    "name": "Basmati Rice (1kg)",
+    "category": "Pantry Staples",
+    "subcategory": "Rice",
+    "price": 3.1,
+    "image": "/images/rice.jpg"
+  },
+  {
+    "id": 14,
+    "name": "Spaghetti",
+    "category": "Pantry Staples",
+    "subcategory": "Pasta",
+    "price": 1.6,
+    "image": "/images/spaghetti.jpg"
+  },
+  {
+    "id": 15,
+    "name": "Canned Tomatoes",
+    "category": "Pantry Staples",
+    "subcategory": "Canned Goods",
+    "price": 1.2,
+    "image": "/images/canned-tomatoes.jpg"
+  },
+  {
+    "id": 16,
+    "name": "All-Purpose Flour",
+    "category": "Pantry Staples",
+    "subcategory": "Baking Essentials",
+    "price": 2.2,
+    "image": "/images/flour.jpg"
+  },
+  {
+    "id": 17,
+    "name": "Tomato Ketchup",
+    "category": "Pantry Staples",
+    "subcategory": "Condiments",
+    "price": 1.9,
+    "image": "/images/ketchup.jpg"
+  },
+  {
+    "id": 18,
+    "name": "Potato Chips",
+    "category": "Snacks & Beverages",
+    "subcategory": "Chips",
+    "price": 1.5,
+    "image": "/images/chips.jpg"
+  },
+  {
+    "id": 19,
+    "name": "Milk Chocolate Bar",
+    "category": "Snacks & Beverages",
+    "subcategory": "Chocolates",
+    "price": 1.8,
+    "image": "/images/chocolate.jpg"
+  },
+  {
+    "id": 20,
+    "name": "Cola (1L)",
+    "category": "Snacks & Beverages",
+    "subcategory": "Soft Drinks",
+    "price": 1.4,
+    "image": "/images/cola.jpeg"
+  },
+  {
+    "id": 21,
+    "name": "Instant Coffee",
+    "category": "Snacks & Beverages",
+    "subcategory": "Coffee",
+    "price": 3.5,
+    "image": "/images/coffee.jpg"
+  },
+  {
+    "id": 22,
+    "name": "Orange Juice",
+    "category": "Snacks & Beverages",
+    "subcategory": "Juices",
+    "price": 2.8,
+    "image": "/images/juice.jpg"
+  }
+]
