@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | QuickMart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --off-white: #F8F9FA;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e6f2e6 100%);
+            color: #123523;
+            /* More visible SVG mesh wallpaper */
+            background-image: url('data:image/svg+xml;utf8,<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="40" cy="40" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="10" cy="70" r="2.5" fill="%2385A947" fill-opacity="0.13"/><circle cx="70" cy="10" r="2.5" fill="%2385A947" fill-opacity="0.13"/></svg>');
+            background-repeat: repeat;
+            background-size: 80px 80px;
+        }
+        .navbar {
+            background-color: var(--dark-green);
+        }
+        .navbar-brand img {
+            max-height: 40px;
+        }
+        .report-card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            margin-bottom: 30px;
+        }
+        .report-card .card-header {
+            background-color: var(--medium-green);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .stat-box {
+            border-radius: 10px;
+            background: var(--cream);
+            padding: 25px 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .stat-title {
+            font-size: 1.1rem;
+            color: var(--medium-green);
+            font-weight: 500;
+        }
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark-green);
+        }
+        .tier-silver {
+            background-color: #C0C0C0;
+            color: #222;
+            border-radius: 12px;
+            padding: 2px 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .tier-gold {
+            background-color: #FFD700;
+            color: #222;
+            border-radius: 12px;
+            padding: 2px 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .tier-platinum {
+            background-color: #E5E4E2;
+            color: #222;
+            border-radius: 12px;
+            padding: 2px 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .stat-title.tier-silver, .stat-title.tier-gold, .stat-title.tier-platinum {
+            color: #222 !important;
+            background: none !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="/images/QUICKMART_logo.png" alt="QuickMart Logo" style="max-height: 64px; display: block;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/prime-members"><i class="fas fa-users"></i> Prime Members</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/reports"><i class="fas fa-chart-line"></i> Reports</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container my-4">
+    <h2 class="mb-4 section-title"><i class="fas fa-chart-line me-2"></i>Prime Member Reports</h2>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-box">
+                <div class="stat-title">Total Members</div>
+                <div class="stat-value" th:text="${totalMembers}">0</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-box">
+                <div class="stat-title tier-silver"><i class="fas fa-medal"></i> Silver</div>
+                <div class="stat-value" th:text="${silverCount}">0</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-box">
+                <div class="stat-title tier-gold"><i class="fas fa-medal"></i> Gold</div>
+                <div class="stat-value" th:text="${goldCount}">0</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-box">
+                <div class="stat-title tier-platinum"><i class="fas fa-medal"></i> Platinum</div>
+                <div class="stat-value" th:text="${platinumCount}">0</div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-box" style="background: var(--medium-green); color: #fff;">
+                <div class="stat-title" style="color: #fff;">Average Points</div>
+                <div class="stat-value" th:text="${averagePoints}">0</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-box" style="background: var(--light-green); color: #fff;">
+                <div class="stat-title" style="color: #fff;">New Members in <span th:text="${currentMonth}">This Month</span></div>
+                <div class="stat-value" th:text="${newMembersThisMonth}">0</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-box" style="background: #fff; border: 2px solid var(--medium-green);">
+                <div class="stat-title" style="color: var(--medium-green);">Top Member</div>
+                <div class="stat-value" th:text="${topMember != null ? topMember.name : 'N/A'}">N/A</div>
+                <div class="small" th:if="${topMember != null}">
+                    <span class="fw-bold">Points:</span> <span th:text="${topMember.points}">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card report-card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Top 5 Members by Points</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead style="background: var(--cream); color: var(--dark-green);">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Member ID</th>
+                            <th>Tier</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="member,iter : ${topMembers}">
+                            <td th:text="${iter.index + 1}">1</td>
+                            <td th:text="${member.name}">Name</td>
+                            <td th:text="${member.id}">ID</td>
+                            <td>
+                                <span th:text="${member.tier}" th:classappend="'tier-badge tier-' + ${member.tier.toLowerCase()}">TIER</span>
+                            </td>
+                            <td th:text="${member.points}">0</td>
+                        </tr>
+                        <tr th:if="${topMembers.size() == 0}"><td colspan="5" class="text-center">No data</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card report-card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>About Reports</h5>
+        </div>
+        <div class="card-body">
+            <p>This page provides a quick overview of your Prime Member program. You can see the total number of members, tier breakdown, average points, and top members. For more detailed analytics, contact your development team to expand this dashboard.</p>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
