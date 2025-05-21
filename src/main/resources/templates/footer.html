@@ -1,0 +1,59 @@
+<div th:fragment="footer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* QuickMart Footer Styles */
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --beige: #EFE3C2;
+            --white: #FFFFFF;
+            --transition-speed: 0.3s;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        footer { background-color: var(--dark-green); color: var(--white); padding: 40px 0; margin-top: 50px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; padding: 0 20px; }
+        .footer-section { flex: 1; margin: 0 15px; }
+        .footer-section h3 { color: var(--beige); margin-bottom: 15px; font-size: 18px; }
+        .social-icons { display: flex; gap: 15px; margin-top: 10px; }
+        .social-icon img { width: 24px; height: 24px; transition: transform var(--transition-speed); }
+        .social-icon:hover img { transform: scale(1.2); }
+        .footer-divider { height: 1px; background-color: var(--beige); margin: 30px 0; opacity: 0.3; }
+        .copyright { text-align: center; padding: 20px; font-size: 14px; color: var(--beige); }
+        .copyright a { color: var(--beige); text-decoration: none; transition: color var(--transition-speed); }
+        .copyright a:hover { color: var(--white); }
+        @media screen and (max-width: 768px) { .footer-container { flex-direction: column; text-align: center; } .footer-section { margin: 20px 0; } .social-icons { justify-content: center; } }
+    </style>
+    <!-- Footer with Contact Us and About sections -->
+    <footer>
+        <div class="footer-container">
+            <div id="contact-us" class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@quickmart.com</p>
+                <p>Phone: (+94) 77 028 4928</p>
+                <p>Address: 529 Market Street, Kengalla</p>
+            </div>
+
+            <div id="about-us" class="footer-section">
+                <h3>About QuickMart</h3>
+                <p>QuickMart is your neighborhood grocery store, committed to providing fresh, high-quality products at affordable prices.</p>
+            </div>
+
+            <div id="follow-us" class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><img src="/whatsapp.png" alt="WhatsApp"></a>
+                    <a href="#" class="social-icon"><img src="/facebook_b&w.png" alt="Facebook"></a>
+                    <a href="#" class="social-icon"><img src="/messenger.png" alt="Messenger"></a>
+                    <a href="#" class="social-icon"><img src="/instagram.png" alt="Instagram"></a>
+                    <a href="#" class="social-icon"><img src="/linkedin.png" alt="LinkedIn"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="copyright">
+            Copyright © 2025 QuickMart Corporation | All Rights Reserved |
+            <a href="#">Terms and Conditions</a> | <a href="#">Privacy Policy</a>
+        </div>
+    </footer>
+</div> 
