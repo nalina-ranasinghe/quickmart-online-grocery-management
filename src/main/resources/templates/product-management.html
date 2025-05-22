@@ -1,15 +1,704 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product Management - QuickMart Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickMart - Product Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --off-white: #F8F9FA;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--off-white);
+            margin-left: 18rem; /* Add margin for sidebar */
+            transition: margin-left 0.3s ease;
+        }
+
+        @media (max-width: 992px) {
+            body {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                margin-left: 0;
+            }
+        }
+
+        .navbar {
+            background-color: var(--dark-green);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-left: -18rem; /* Offset for sidebar */
+            width: calc(100% + 18rem);
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 992px) {
+            .navbar {
+                margin-left: -70px;
+                width: calc(100% + 70px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .nav-link {
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--cream) !important;
+            transform: translateY(-2px);
+        }
+
+        .page-title {
+            color: var(--dark-green);
+            border-bottom: 2px solid var(--light-green);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stats-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            border-left: 5px solid var(--medium-green);
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-icon {
+            font-size: 1.8rem;
+            color: var(--medium-green);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--dark-green);
+        }
+
+        .stats-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .table-header {
+            background-color: var(--medium-green);
+            color: white;
+        }
+
+        .products-table {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .products-table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .products-table tbody tr:hover {
+            background-color: rgba(133, 169, 71, 0.1);
+        }
+
+        .products-table thead th {
+            font-weight: 600;
+        }
+
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 2px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view {
+            background-color: var(--cream);
+            color: var(--dark-green);
+        }
+
+        .btn-edit {
+            background-color: var(--light-green);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-add-product {
+            background-color: var(--medium-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-product:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 15px 8px 35px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--medium-green);
+            box-shadow: 0 0 0 0.2rem rgba(62, 123, 39, 0.25);
+            outline: none;
+        }
+
+        .search-box .fa-search {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        /* Product Modal Styles */
+        .modal-header {
+            background-color: var(--medium-green);
+            color: white;
+        }
+
+        .modal-content {
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control:focus {
+            border-color: var(--light-green);
+            box-shadow: 0 0 0 0.2rem rgba(133, 169, 71, 0.25);
+        }
+
+        /* Animation for cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .stats-card:nth-child(1) { animation-delay: 0.1s; }
+        .stats-card:nth-child(2) { animation-delay: 0.2s; }
+
+        /* Product image thumbnail */
+        .product-thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        /* Texture background */
+        .texture-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23123523' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Mobile toggle button */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+            background: var(--dark-green);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="texture-bg">
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Include Sidebar -->
     <div th:replace="fragments/sidebar :: sidebar"></div>
-    <div style="margin-left:16rem; padding:2rem;">
-        <h1>Product Management</h1>
-        <p>This is the Product Management page.</p>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/QUICKMART_logo.png" alt="QuickMart Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-box me-1"></i> Products
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="page-title">
+                <i class="fas fa-box me-2"></i> Product Management
+            </h1>
+            <button class="btn btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <i class="fas fa-plus me-1"></i> Add Product
+            </button>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <!-- Total Products Card -->
+            <div class="col-md-6 mb-3 fade-in opacity-0">
+                <div class="stats-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stats-number" th:text="${products.size()}">0</div>
+                            <div class="stats-label">Total Products</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Card -->
+            <div class="col-md-6 mb-3 fade-in opacity-0">
+                <div class="stats-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stats-number" th:text="${categories.size()}">0</div>
+                            <div class="stats-label">Categories</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="row mb-3">
+            <div class="col-md-6 mx-auto">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search products...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="products-table mb-4">
+            <table class="table table-hover mb-0">
+                <thead class="table-header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price ($)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.id}"></td>
+                        <td><img th:src="${product.image}" alt="Product Image" class="product-thumbnail"></td>
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.category}"></td>
+                        <td th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></td>
+                        <td>
+                            <button class="btn-action btn-edit" title="Edit Product" th:onclick="'editProduct(' + ${product.id} + ')'"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete" title="Delete Product" th:onclick="'deleteProduct(' + ${product.id} + ')'"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel"><i class="fas fa-plus-circle me-2"></i>Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm" data-mode="create">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="productName" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="productName" name="name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productCategory" class="form-label">Category</label>
+                                <select class="form-select" id="productCategory" name="category" required>
+                                    <option value="" selected disabled>Select a category</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category}"
+                                            th:text="${category}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="productSubcategory" class="form-label">Subcategory</label>
+                                <input type="text" class="form-control" id="productSubcategory" name="subcategory">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productPrice" class="form-label">Price ($)</label>
+                                <input type="number" step="0.01" min="0" class="form-control" id="productPrice" name="price" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="productImage" class="form-label">Product Image</label>
+                                <input type="text" class="form-control" id="productImage" name="image" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="productDescription" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productTags" class="form-label">Tags (comma separated)</label>
+                            <input type="text" class="form-control" id="productTags" name="tags" placeholder="organic, fresh, imported">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-add-product">Save Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API endpoints
+        const API_BASE_URL = '/api/admin/products';
+
+        // DOM Elements
+        const productForm = document.getElementById('productForm');
+        const searchInput = document.getElementById('searchInput');
+        const categorySelect = document.getElementById('productCategory');
+        const productsTable = document.querySelector('.products-table table');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            // Remove opacity-0 class from stats cards to make them visible
+            document.querySelectorAll('.stats-card').forEach(card => {
+                card.parentElement.classList.remove('opacity-0');
+            });
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            searchInput.addEventListener('input', debounce(handleSearch, 300));
+
+            // Category change
+            categorySelect.addEventListener('change', handleCategoryChange);
+
+            // Form submission
+            productForm.addEventListener('submit', handleFormSubmit);
+        }
+
+        // Load all products
+        async function loadProducts() {
+            try {
+                const response = await fetch(API_BASE_URL);
+                const products = await response.json();
+                renderProducts(products);
+            } catch (error) {
+                showError('Failed to load products');
+            }
+        }
+
+        // Load categories
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories`);
+                const categories = await response.json();
+                renderCategories(categories);
+            } catch (error) {
+                showError('Failed to load categories');
+            }
+        }
+
+        // Render products in the table
+        function renderProducts(products) {
+            const tbody = productsTable.querySelector('tbody');
+            tbody.innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.id}</td>
+                    <td><img src="${product.image}" alt="Product Image" class="product-thumbnail"></td>
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>
+                        <button class="btn-action btn-edit" onclick="editProduct(${product.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-action btn-delete" onclick="deleteProduct(${product.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render categories in the select
+        function renderCategories(categories) {
+            categorySelect.innerHTML = `
+                <option value="">Select a category</option>
+                ${categories.map(category => `
+                    <option value="${category}">${category}</option>
+                `).join('')}
+            `;
+        }
+
+        // Handle form submission
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(productForm);
+            const product = {
+                name: formData.get('name'),
+                category: formData.get('category'),
+                price: parseFloat(formData.get('price')),
+                image: formData.get('image'),
+                description: formData.get('description'),
+                tags: formData.get('tags')
+            };
+
+            try {
+                const method = productForm.dataset.mode === 'edit' ? 'PUT' : 'POST';
+                const url = method === 'PUT'
+                    ? `${API_BASE_URL}/${productForm.dataset.productId}`
+                    : API_BASE_URL;
+
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(product)
+                });
+
+                if (response.ok) {
+                    productForm.reset();
+                    productForm.dataset.mode = 'create';
+                    productForm.dataset.productId = '';
+                    loadProducts();
+                    showSuccess('Product saved successfully');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
+                    modal.hide();
+                } else {
+                    showError('Failed to save product');
+                }
+            } catch (error) {
+                showError('An error occurred while saving the product');
+            }
+        }
+
+        // Handle product deletion
+        async function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    loadProducts();
+                    showSuccess('Product deleted successfully');
+                } else {
+                    showError('Failed to delete product');
+                }
+            } catch (error) {
+                showError('An error occurred while deleting the product');
+            }
+        }
+
+        // Handle product editing
+        async function editProduct(id) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch product details');
+                }
+                const product = await response.json();
+
+                // Populate the form fields
+                productForm.elements.name.value = product.name || '';
+                productForm.elements.category.value = product.category || '';
+                productForm.elements.price.value = product.price !== undefined ? product.price : '';
+                productForm.elements.image.value = product.image || '';
+                if (productForm.elements.description) {
+                    productForm.elements.description.value = product.description || '';
+                }
+                if (productForm.elements.tags) {
+                    productForm.elements.tags.value = product.tags || '';
+                }
+
+                productForm.dataset.mode = 'edit';
+                productForm.dataset.productId = id;
+
+                // Update modal title
+                document.getElementById('addProductModalLabel').innerHTML = '<i class="fas fa-edit me-2"></i>Edit Product';
+
+                // Show the modal
+                const modal = new bootstrap.Modal(document.getElementById('addProductModal'));
+                modal.show();
+            } catch (error) {
+                showError('Failed to load product details');
+                console.error(error);
+            }
+        }
+
+        // Handle search
+        function handleSearch(event) {
+            const searchTerm = event.target.value.toLowerCase();
+            const rows = productsTable.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        // Handle category change
+        function handleCategoryChange(event) {
+            const category = event.target.value;
+        }
+
+        // Utility functions
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function showSuccess(message) {
+            // Implement your success notification here
+            alert(message);
+        }
+
+        function showError(message) {
+            // Implement your error notification here
+            alert(message);
+        }
+
+        // Add this at the beginning of your script section
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile sidebar toggle
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                });
+
+                // Close sidebar when clicking outside on mobile
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768 &&
+                        !sidebar.contains(e.target) &&
+                        !sidebarToggle.contains(e.target) &&
+                        sidebar.classList.contains('active')) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            }
+
+            // Rest of your existing DOMContentLoaded code...
+        });
+    </script>
+    
 </body>
 </html> 

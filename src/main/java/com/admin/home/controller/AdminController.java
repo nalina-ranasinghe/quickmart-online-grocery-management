@@ -66,14 +66,6 @@ public class AdminController {
         return "user-management";
     }
 
-    @GetMapping("/product-management")
-    public String showProductManagement(HttpSession session) {
-        if (session.getAttribute("adminLoggedIn") == null) {
-            return "redirect:/admin/login";
-        }
-        return "product-management";
-    }
-
     @GetMapping("/order-overview")
     public String showOrderOverview(HttpSession session) {
         if (session.getAttribute("adminLoggedIn") == null) {
@@ -86,29 +78,18 @@ public class AdminController {
     private boolean validateAdminCredentials(String username, String password) {
         try {
             Resource resource = new ClassPathResource(ADMIN_CREDENTIALS_FILE);
-            BufferedReader reader = new BufferedReader(
-                new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-            String line;
-            
-            // Expected format in file: username:password
-            while ((line = reader.readLine()) != null) {
-                String[] credentials = line.split(":");
-                if (credentials.length == 2) {
-                    String storedUsername = credentials[0].trim();
-                    String storedPassword = credentials[1].trim();
-                    
-                    if (storedUsername.equals(username) && storedPassword.equals(password)) {
-                        reader.close();
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(":");
+                    if (parts.length == 2 && parts[0].equals(username) && parts[1].equals(password)) {
                         return true;
                     }
                 }
             }
-            reader.close();
         } catch (IOException e) {
-            // File not found or cannot be read, fallback to default admin/admin123
-            if ("admin".equals(username) && "admin123".equals(password)) {
-                return true;
-            }
+            e.printStackTrace();
         }
         return false;
     }

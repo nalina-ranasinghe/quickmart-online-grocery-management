@@ -17,11 +17,8 @@ public class WelcomeController {
     }
     
     @GetMapping("/admin")
-    public String adminHome(HttpSession session) {
-        // If already logged in, redirect to home
-        if (session.getAttribute("adminLoggedIn") != null) {
-            return "redirect:/admin/home";
-        }
+    public String adminHome() {
+        // Always show login page for /admin
         return "redirect:/admin/login";
     }
-} 
+}
