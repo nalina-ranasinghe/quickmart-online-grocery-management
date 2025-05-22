@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +34,7 @@
 
         /* Navigation Bar */
         #top-navbar {
-            background-color: var(--primary-color);
+            background: linear-gradient(160deg, #123523 70%, #3E7B27 100%);
             padding: 0.7rem 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
@@ -484,6 +484,7 @@
             }
         }
     </style>
+    <link rel="icon" type="image/png" href="/images/quickmart-favicon.png">
 </head>
 <body>
 <!-- Top Navigation Bar -->
@@ -491,7 +492,6 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/admin/dashboard">
             <img src="/images/QUICKMART_logo.png" alt="QuickMart Logo" class="logo-img">
-            QuickMart
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -499,28 +499,8 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
-                        <i class="fas fa-tachometer-alt me-1"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/members">
-                        <i class="fas fa-users me-1"></i> Prime Members
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="/admin/products">
                         <i class="fas fa-box me-1"></i> Products
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/reports">
-                        <i class="fas fa-chart-bar me-1"></i> Reports
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">
-                        <i class="fas fa-sign-out-alt me-1"></i> Logout
                     </a>
                 </li>
             </ul>
@@ -530,50 +510,8 @@
 
 <div class="container-fluid main-container">
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-lg-2 sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h4><i class="fas fa-tasks"></i> Admin Panel</h4>
-            </div>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/members">
-                        <i class="fas fa-users"></i> Prime Members
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/products">
-                        <i class="fas fa-box"></i> Products
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/categories">
-                        <i class="fas fa-tags"></i> Categories
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/reports">
-                        <i class="fas fa-chart-bar"></i> Reports
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/settings">
-                        <i class="fas fa-cog"></i> Settings
-                    </a>
-                </li>
-            </ul>
-            <div class="sidebar-footer">
-                <p>&copy; 2025 QuickMart</p>
-            </div>
-        </div>
-
-        <!-- Main Content Area -->
-        <div class="col-lg-10 content-area">
+        <div th:replace="sidebar :: sidebar"></div>
+        <div class="col content-area" style="margin-left: 18rem;">
             <div class="page-header">
                 <div>
                     <h1><i class="fas fa-shopping-cart"></i> Order Management</h1>
@@ -679,23 +617,6 @@
                     <!-- Orders will be loaded here dynamically -->
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination-container" id="pagination">
-                <nav aria-label="Orders pagination">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
     </div>
@@ -1016,7 +937,6 @@
                 </td>
             </tr>
         `);
-            updatePagination(0);
             return;
         }
 
@@ -1055,9 +975,6 @@
 
         // Set up action buttons
         setupActionButtons();
-
-        // Update pagination
-        updatePagination(filteredOrders.length);
     }
 
     /**
@@ -1131,48 +1048,6 @@
         // Reset to first page and reload
         currentPage = 1;
         loadOrders();
-    }
-
-    /**
-     * Update pagination controls
-     */
-    function updatePagination(totalItems) {
-        const totalPages = Math.ceil(totalItems / ordersPerPage);
-        const pagination = $("#pagination .pagination");
-        pagination.empty();
-
-        // Previous button
-        pagination.append(`
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
-        </li>
-    `);
-
-        // Page numbers
-        for (let i = 1; i <= totalPages; i++) {
-            pagination.append(`
-            <li class="page-item ${currentPage === i ? 'active' : ''}">
-                <a class="page-link" href="#" data-page="${i}">${i}</a>
-            </li>
-        `);
-        }
-
-        // Next button
-        pagination.append(`
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
-        </li>
-    `);
-
-        // Add click handlers
-        $(".page-link").on("click", function(e) {
-            e.preventDefault();
-            const page = $(this).data("page");
-            if (page && page >= 1 && page <= totalPages) {
-                currentPage = page;
-                loadOrders();
-            }
-        });
     }
 
     /**
