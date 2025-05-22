@@ -71,7 +71,7 @@ public class AdminController {
         if (session.getAttribute("adminLoggedIn") == null) {
             return "redirect:/admin/login";
         }
-        return "order-overview";
+        return "order-management";
     }
 
     // Helper method to validate admin credentials from text file

@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickMart Admin - Order Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* QuickMart Admin Styles */
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --sidebar-width: 250px;
+            --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        #top-navbar {
+            background: linear-gradient(160deg, #123523 70%, #3E7B27 100%);
+            padding: 0.7rem 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .logo-img {
+            height: 32px;
+            margin-right: 10px;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-dark .navbar-nav .active > .nav-link,
+        .navbar-dark .navbar-nav .nav-link.active {
+            color: white;
+            background-color: var(--accent-color);
+        }
+
+        /* Main Container Layout */
+        .main-container {
+            padding: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: #2c3e50;
+            color: #fff;
+            min-height: calc(100vh - 56px);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h4 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: var(--accent-color);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 1.5rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .page-header p {
+            margin-bottom: 0;
+            color: #6c757d;
+        }
+
+        /* Statistics Cards */
+        .stats-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card-body {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary-color);
+            border-radius: 50%;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .pending-icon {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+
+        .processing-icon {
+            background-color: rgba(41, 128, 185, 0.2);
+            color: var(--info-color);
+        }
+
+        .completed-icon {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--accent-color);
+        }
+
+        .stat-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .stat-content p {
+            margin: 0;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        /* Filter and Search */
+        .filter-search {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .search-icon {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Orders Table */
+        .orders-table-wrapper {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            padding: 0.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .table-orders {
+            min-width: 800px;
+        }
+
+        .table-orders thead th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .table-orders tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .table-orders tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .order-status {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-processing {
+            background-color: rgba(41, 128, 185, 0.1);
+            color: var(--info-color);
+        }
+
+        .status-completed {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--accent-color);
+        }
+
+        .status-cancelled {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .view-btn {
+            background-color: var(--info-color);
+        }
+
+        .edit-btn {
+            background-color: var(--warning-color);
+        }
+
+        .delete-btn {
+            background-color: var(--danger-color);
+        }
+
+        .pagination-container {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination .page-link {
+            color: var(--primary-color);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .modal-content {
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .order-details-content {
+            padding: 1rem;
+        }
+
+        .order-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .order-detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .order-detail-section h6 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .order-items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .order-detail-footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .order-total {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        #delete-order-id-display {
+            color: var(--danger-color);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .item-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .remove-item-btn {
+            color: var(--danger-color);
+            background: none;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-item-btn:hover {
+            color: #c0392b;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                z-index: 1000;
+                height: 100%;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .content-area {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .page-header button {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="/images/quickmart-favicon.png">
+</head>
+<body>
+<!-- Top Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark" id="top-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin/dashboard">
+            <img src="/images/QUICKMART_logo.png" alt="QuickMart Logo" class="logo-img">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/products">
+                        <i class="fas fa-box me-1"></i> Products
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+    <div class="row">
+        <div th:replace="sidebar :: sidebar"></div>
+        <div class="col content-area" style="margin-left: 18rem;">
+            <div class="page-header">
+                <div>
+                    <h1><i class="fas fa-shopping-cart"></i> Order Management</h1>
+                    <p>View and manage all customer orders</p>
+                </div>
+                <button class="btn btn-success" id="add-order-btn">
+                    <i class="fas fa-plus"></i> New Order
+                </button>
+            </div>
+
+            <!-- Order Statistics -->
+            <div class="row stats-row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="stat-card-body">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-basket"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h2 id="total-orders">0</h2>
+                                <p>Total Orders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="stat-card-body">
+                            <div class="stat-icon pending-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h2 id="pending-orders">0</h2>
+                                <p>Pending Orders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="stat-card-body">
+                            <div class="stat-icon processing-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h2 id="processing-orders">0</h2>
+                                <p>Processing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card">
+                        <div class="stat-card-body">
+                            <div class="stat-icon completed-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h2 id="completed-orders">0</h2>
+                                <p>Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter and Search -->
+            <div class="filter-search">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <select class="form-select" id="status-filter">
+                            <option value="all">All Orders</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text search-icon"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="search-orders" placeholder="Search by order ID, customer, etc.">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="orders-table-wrapper">
+                <table class="table table-hover table-orders" id="orders-table">
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                    <!-- Orders will be loaded here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Order Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">Add New Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="orderForm">
+                    <input type="hidden" id="order-id">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="customer-name" class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" id="customer-name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customer-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="customer-email" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="customer-phone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="customer-phone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customer-address" class="form-label">Delivery Address</label>
+                            <input type="text" class="form-control" id="customer-address" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="order-date" class="form-label">Order Date</label>
+                            <input type="datetime-local" class="form-control" id="order-date" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="order-status" class="form-label">Status</label>
+                            <select class="form-select" id="order-status" required>
+                                <option value="PENDING">Pending</option>
+                                <option value="PROCESSING">Processing</option>
+                                <option value="COMPLETED">Completed</option>
+                                <option value="CANCELLED">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-4 mb-3">Order Items</h5>
+                    <div id="order-items">
+                        <!-- Order items will be added here dynamically -->
+                    </div>
+
+                    <button type="button" class="btn btn-outline-success mt-3" id="add-item-btn">
+                        <i class="fas fa-plus-circle"></i> Add Item
+                    </button>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <label for="payment-method" class="form-label">Payment Method</label>
+                            <select class="form-select" id="payment-method" required>
+                                <option value="CARD">Credit/Debit Card</option>
+                                <option value="PAYPAL">PayPal</option>
+                                <option value="CASH">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="delivery-notes" class="form-label">Delivery Notes</label>
+                            <textarea class="form-control" id="delivery-notes" rows="2"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-order-btn">Save Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="order-details-content">
+                    <!-- Order details will be loaded here dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="edit-order-detail-btn">Edit Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this order? This action cannot be undone.</p>
+                <p class="fw-bold" id="delete-order-id-display"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap & jQuery Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script>
+    let orders = [];
+    let products = [];
+    /**
+     * QuickMart Admin - Order Management JavaScript
+     * This file contains all the functionality for the order management page
+     */
+
+    // Fetch products from JSON file
+    function fetchProducts() {
+        return $.ajax({
+            url: '/api/admin/products',
+            method: 'GET',
+            dataType: 'json'
+        });
+    }
+
+    // Global variables
+    let currentPage = 1;
+    const ordersPerPage = 10;
+    let filteredOrders = [...orders];
+    let selectedOrderId = null;
+
+    // Initialize page
+    function initializePage() {
+        fetchProducts().done(function(data) {
+            products = data;
+            fetchOrders().done(function(orderData) {
+                orders = orderData;
+                filteredOrders = [...orders];
+                loadOrders();
+                updateOrderStatistics();
+            });
+        }).fail(function() {
+            showToast('Failed to load products', 'error');
+        });
+        setupEventListeners();
+    }
+
+    // Document ready
+    $(document).ready(function() {
+        initializePage();
+    });
+
+    // Add order item
+    function addOrderItem() {
+        // This function is not used in the modal, so leave it empty or remove if not needed
+    }
+
+    /**
+     * Set up all event listeners
+     */
+    function setupEventListeners() {
+        // Add order button
+        $("#add-order-btn").on("click", showAddOrderModal);
+
+        // Save order button
+        $("#save-order-btn").on("click", saveOrder);
+
+        // Add item button in order form
+        $("#add-item-btn").on("click", addItemRow);
+
+        // Filter and search inputs
+        $("#status-filter").on("change", applyFilters);
+        $("#search-orders").on("input", applyFilters);
+
+        // Confirm delete button
+        $("#confirm-delete-btn").on("click", deleteOrder);
+
+        // Edit order button in details modal
+        $("#edit-order-detail-btn").on("click", function() {
+            $("#orderDetailsModal").modal("hide");
+            showEditOrderModal(selectedOrderId);
+        });
+    }
+
+    /**
+     * Load orders based on current filters and pagination
+     */
+    function loadOrders() {
+        // Clear the table
+        const tableBody = $("#orders-table-body");
+        tableBody.empty();
+
+        // Calculate pagination
+        const startIndex = (currentPage - 1) * ordersPerPage;
+        const endIndex = startIndex + ordersPerPage;
+        const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+
+        // If no orders, show a message
+        if (paginatedOrders.length === 0) {
+            tableBody.append(`
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    No orders found matching your criteria.
+                </td>
+            </tr>
+        `);
+            return;
+        }
+
+        // Populate the table
+        paginatedOrders.forEach(order => {
+            const row = `
+            <tr>
+                <td>${order.id}</td>
+                <td>
+                    <div>${order.customerName}</div>
+                    <small class="text-muted">${order.customerEmail}</small>
+                </td>
+                <td>${formatDate(order.date)}</td>
+                <td>${order.items.length}</td>
+                <td>$${order.total.toFixed(2)}</td>
+                <td>
+                    <span class="order-status status-${order.status.toLowerCase()}">${formatStatus(order.status)}</span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn action-btn view-btn" data-id="${order.id}" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn action-btn edit-btn" data-id="${order.id}" title="Edit Order">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn action-btn delete-btn" data-id="${order.id}" title="Delete Order">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            tableBody.append(row);
+        });
+
+        // Set up action buttons
+        setupActionButtons();
+    }
+
+    /**
+     * Set up the action buttons for each order
+     */
+    function setupActionButtons() {
+        // View button
+        $(".view-btn").on("click", function() {
+            const orderId = $(this).data("id");
+            showOrderDetails(orderId);
+        });
+
+        // Edit button
+        $(".edit-btn").on("click", function() {
+            const orderId = $(this).data("id");
+            showEditOrderModal(orderId);
+        });
+
+        // Delete button
+        $(".delete-btn").on("click", function() {
+            const orderId = $(this).data("id");
+            showDeleteConfirmation(orderId);
+        });
+    }
+
+    /**
+     * Update order statistics
+     */
+    function updateOrderStatistics() {
+        const totalOrders = orders.length;
+        const pendingOrders = orders.filter(order => order.status === "PENDING").length;
+        const processingOrders = orders.filter(order => order.status === "PROCESSING").length;
+        const completedOrders = orders.filter(order => order.status === "COMPLETED").length;
+
+        $("#total-orders").text(totalOrders);
+        $("#pending-orders").text(pendingOrders);
+        $("#processing-orders").text(processingOrders);
+        $("#completed-orders").text(completedOrders);
+    }
+
+    /**
+     * Apply filters to orders
+     */
+    function applyFilters() {
+        const statusFilter = $("#status-filter").val();
+        const searchQuery = $("#search-orders").val().toLowerCase();
+
+        filteredOrders = orders.filter(order => {
+            // Status filter
+            if (statusFilter !== "all" && order.status !== statusFilter.toUpperCase()) {
+                return false;
+            }
+
+            // Search query
+            if (searchQuery) {
+                const searchFields = [
+                    order.id,
+                    order.customerName,
+                    order.customerEmail,
+                    order.customerPhone,
+                    order.address
+                ];
+                return searchFields.some(field =>
+                    field.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            return true;
+        });
+
+        // Reset to first page and reload
+        currentPage = 1;
+        loadOrders();
+    }
+
+    /**
+     * Show the add order modal
+     */
+    function showAddOrderModal() {
+        // Reset form
+        $("#orderForm")[0].reset();
+        $("#order-id").val("");
+        $("#orderModalLabel").text("Add New Order");
+        $("#order-items").empty();
+
+        // Show modal using Bootstrap 5 API
+        var orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
+        orderModal.show();
+    }
+
+    /**
+     * Show the edit order modal
+     */
+    function showEditOrderModal(orderId) {
+        const order = orders.find(o => o.id === orderId);
+        if (!order) return;
+
+        // Set form values
+        $("#order-id").val(order.id);
+        $("#customer-name").val(order.customerName);
+        $("#customer-email").val(order.customerEmail);
+        $("#customer-phone").val(order.customerPhone);
+        $("#customer-address").val(order.address);
+        $("#order-date").val(order.date.slice(0, 16));
+        $("#order-status").val(order.status);
+        $("#payment-method").val(order.paymentMethod);
+        $("#delivery-notes").val(order.deliveryNotes);
+
+        // Clear and add items
+        $("#order-items").empty();
+        order.items.forEach(item => addItemRow(item));
+
+        // Update modal title
+        $("#orderModalLabel").text("Edit Order");
+
+        // Show modal
+        $("#orderModal").modal("show");
+    }
+
+    /**
+     * Add a new item row to the order form
+     */
+    function addItemRow(item = null) {
+        const itemRow = $(`
+        <div class="item-row">
+            <div class="item-row-header">
+                <h6>Item ${$("#order-items .item-row").length + 1}</h6>
+                <button type="button" class="remove-item-btn" title="Remove Item">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <select class="form-select item-select" required>
+                        <option value="">Select Product</option>
+                        ${products.map(p => `
+                            <option value="${p.id}"
+                                data-price="${p.price}"
+                                data-image="${p.image}"
+                                ${item && item.id === p.id ? 'selected' : ''}>
+                                ${p.name} - $${p.price.toFixed(2)}
+                            </option>
+                        `).join('')}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control item-quantity"
+                        min="1" value="${item ? item.quantity : 1}" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control item-total" readonly
+                        value="${item ? (item.price * item.quantity).toFixed(2) : '0.00'}">
+                </div>
+            </div>
+        </div>
+    `);
+
+        $("#order-items").append(itemRow);
+        setupItemRowEvents($("#order-items .item-row").length - 1);
+    }
+
+    /**
+     * Set up event handlers for an item row
+     */
+    function setupItemRowEvents(index) {
+        const row = $("#order-items .item-row").eq(index);
+
+        // Remove item button
+        row.find(".remove-item-btn").on("click", function() {
+            row.remove();
+            updateItemNumbers();
+        });
+
+        // Product selection change
+        row.find(".item-select").on("change", function() {
+            const option = $(this).find("option:selected");
+            const price = parseFloat(option.data("price")) || 0;
+            const quantity = parseInt(row.find(".item-quantity").val()) || 0;
+            row.find(".item-total").val((price * quantity).toFixed(2));
+        });
+
+        // Quantity change
+        row.find(".item-quantity").on("input", function() {
+            const price = parseFloat(row.find(".item-select option:selected").data("price")) || 0;
+            const quantity = parseInt($(this).val()) || 0;
+            row.find(".item-total").val((price * quantity).toFixed(2));
+        });
+    }
+
+    /**
+     * Update item numbers after removal
+     */
+    function updateItemNumbers() {
+        $("#order-items .item-row").each(function(index) {
+            $(this).find("h6").text(`Item ${index + 1}`);
+        });
+    }
+
+    /**
+     * Save the order (add or update)
+     */
+    function saveOrder() {
+        // Validate form
+        const form = $("#orderForm")[0];
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        // Get form data
+        const orderId = $("#order-id").val();
+        const isEdit = orderId !== "";
+
+        // Get items
+        const items = [];
+        $("#order-items .item-row").each(function() {
+            const select = $(this).find(".item-select");
+            const option = select.find("option:selected");
+            const quantity = parseInt($(this).find(".item-quantity").val());
+
+            if (select.val() && quantity > 0) {
+                items.push({
+                    id: parseInt(select.val()),
+                    name: option.text().split(" - ")[0],
+                    price: parseFloat(option.data("price")),
+                    quantity: quantity,
+                    image: option.data("image")
+                });
+            }
+        });
+
+        if (items.length === 0) {
+            showToast("Please add at least one item to the order", "error");
+            return;
+        }
+
+        // Calculate total
+        const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+        // Create order object
+        const order = {
+            id: isEdit ? orderId : undefined, // Let backend assign ID for new orders
+            customerName: $("#customer-name").val(),
+            customerEmail: $("#customer-email").val(),
+            customerPhone: $("#customer-phone").val(),
+            address: $("#customer-address").val(),
+            date: $("#order-date").val(),
+            items: items,
+            total: total,
+            status: $("#order-status").val(),
+            paymentMethod: $("#payment-method").val(),
+            deliveryNotes: $("#delivery-notes").val()
+        };
+
+        if (isEdit) {
+            // PUT updated order to backend
+            $.ajax({
+                url: '/api/admin/orders/' + orderId,
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(order),
+                success: function(updatedOrder) {
+                    const index = orders.findIndex(o => o.id == orderId);
+                    if (index !== -1) {
+                        orders[index] = updatedOrder;
+                    }
+                    filteredOrders = [...orders];
+                    loadOrders();
+                    updateOrderStatistics();
+                    $("#orderModal").modal("hide");
+                    showToast('Order updated successfully');
+                },
+                error: function() {
+                    showToast('Failed to update order', 'error');
+                }
+            });
+        } else {
+            // POST new order to backend
+            $.ajax({
+                url: '/api/admin/orders',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(order),
+                success: function(savedOrder) {
+                    orders.push(savedOrder);
+                    filteredOrders = [...orders];
+                    loadOrders();
+                    updateOrderStatistics();
+                    $("#orderModal").modal("hide");
+                    showToast('Order created successfully');
+                },
+                error: function() {
+                    showToast('Failed to save order', 'error');
+                }
+            });
+        }
+    }
+
+    /**
+     * Show order details
+     */
+    function showOrderDetails(orderId) {
+        const order = orders.find(o => o.id === orderId);
+        if (!order) return;
+
+        selectedOrderId = orderId;
+
+        // Format the details content
+        const content = `
+        <div class="order-detail-header">
+            <div>
+                <h4>${order.id}</h4>
+                <p class="text-muted mb-0">${formatDate(order.date)}</p>
+            </div>
+            <span class="order-status status-${order.status.toLowerCase()}">
+                ${formatStatus(order.status)}
+            </span>
+        </div>
+
+        <div class="order-detail-section">
+            <h6>Customer Information</h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Name:</strong> ${order.customerName}</p>
+                    <p><strong>Email:</strong> ${order.customerEmail}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Phone:</strong> ${order.customerPhone}</p>
+                    <p><strong>Address:</strong> ${order.address}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-detail-section">
+            <h6>Order Items</h6>
+            <ul class="order-items-list">
+                ${order.items.map(item => `
+                    <li class="order-item">
+                        <img src="${item.image}" alt="${item.name}" class="item-image">
+                        <div class="item-details">
+                            <h6 class="mb-1">${item.name}</h6>
+                            <p class="mb-0 text-muted">
+                                Quantity: ${item.quantity} × $${item.price.toFixed(2)}
+                            </p>
+                        </div>
+                        <div class="item-price">
+                            $${(item.price * item.quantity).toFixed(2)}
+                        </div>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+
+        <div class="order-detail-section">
+            <h6>Payment & Delivery</h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Payment Method:</strong> ${formatPaymentMethod(order.paymentMethod)}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Delivery Notes:</strong> ${order.deliveryNotes || 'None'}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-detail-footer">
+            <div class="order-total">
+                Total: $${order.total.toFixed(2)}
+            </div>
+        </div>
+    `;
+
+        // Update modal content and show
+        $(".order-details-content").html(content);
+        $("#orderDetailsModal").modal("show");
+    }
+
+    /**
+     * Show delete confirmation
+     */
+    function showDeleteConfirmation(orderId) {
+        selectedOrderId = orderId;
+        $("#delete-order-id-display").text(`Order ID: ${orderId}`);
+        $("#deleteModal").modal("show");
+    }
+
+    /**
+     * Delete the selected order
+     */
+    function deleteOrder() {
+        const index = orders.findIndex(o => o.id === selectedOrderId);
+        if (index !== -1) {
+            // DELETE from backend
+            $.ajax({
+                url: '/api/admin/orders/' + selectedOrderId,
+                method: 'DELETE',
+                success: function() {
+                    orders.splice(index, 1);
+                    filteredOrders = [...orders];
+                    loadOrders();
+                    updateOrderStatistics();
+                    $("#deleteModal").modal("hide");
+                    showToast("Order deleted successfully");
+                },
+                error: function() {
+                    showToast("Failed to delete order", "error");
+                }
+            });
+        }
+    }
+
+    /**
+     * Set up sidebar toggle for mobile
+     */
+    function setupSidebarToggle() {
+        $(".navbar-toggler").on("click", function() {
+            $("#sidebar").toggleClass("show");
+        });
+
+        // Close sidebar when clicking outside on mobile
+        $(document).on("click", function(e) {
+            if ($(window).width() < 992) {
+                if (!$(e.target).closest("#sidebar, .navbar-toggler").length) {
+                    $("#sidebar").removeClass("show");
+                }
+            }
+        });
+    }
+
+    /**
+     * Show a toast message
+     */
+    function showToast(message, type = "success") {
+        const toast = $(`
+        <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0"
+            role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `);
+
+        $(".toast-container").append(toast);
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+
+        // Remove toast after it's hidden
+        toast.on("hidden.bs.toast", function() {
+            toast.remove();
+        });
+    }
+
+    /**
+     * Format a date string
+     */
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    /**
+     * Format an order status
+     */
+    function formatStatus(status) {
+        return status.charAt(0) + status.slice(1).toLowerCase();
+    }
+
+    /**
+     * Format a payment method
+     */
+    function formatPaymentMethod(method) {
+        const methods = {
+            'CARD': 'Credit/Debit Card',
+            'PAYPAL': 'PayPal',
+            'CASH': 'Cash on Delivery'
+        };
+        return methods[method] || method;
+    }
+
+    function fetchOrders() {
+        return $.ajax({
+            url: '/api/admin/orders',
+            method: 'GET',
+            dataType: 'json'
+        });
+    }
+</script>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+</body>
+</html>

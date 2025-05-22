@@ -1,0 +1,79 @@
+[ {
+  "id" : 1,
+  "customerName" : "Binuka Bandara",
+  "customerEmail" : "binuka.murukku@gmail.com",
+  "customerPhone" : "0779374653",
+  "address" : "Bodima, Muslim vilage, Kengalla.",
+  "date" : "2025-05-22T13:59:00",
+  "status" : "PROCESSING",
+  "paymentMethod" : "CARD",
+  "deliveryNotes" : "Gedara dora laga thiyala yanna aiyaa..",
+  "total" : 7.5,
+  "items" : [ {
+    "id" : 1,
+    "productId" : null,
+    "name" : "\n                                Bananas",
+    "price" : 1.5,
+    "quantity" : 5,
+    "image" : "/images/bananas.jpg"
+  } ]
+}, {
+  "id" : 2,
+  "customerName" : "Hiran Dharmarathna",
+  "customerEmail" : "d.hiran@gmail.com",
+  "customerPhone" : "0712736483",
+  "address" : "69, Ruber waththa, Kurunagala.",
+  "date" : "2025-05-20T14:03:00",
+  "status" : "COMPLETED",
+  "paymentMethod" : "CARD",
+  "deliveryNotes" : "give a call when at the gate.",
+  "total" : 17.6,
+  "items" : [ {
+    "id" : 19,
+    "productId" : null,
+    "name" : "\n                                Ferrero Rocher",
+    "price" : 12.8,
+    "quantity" : 1,
+    "image" : "/images/chocolate.jpg"
+  }, {
+    "id" : 4,
+    "productId" : null,
+    "name" : "\n                                Whole Milk",
+    "price" : 2.4,
+    "quantity" : 2,
+    "image" : "/images/milk.jpg"
+  } ]
+}, {
+  "id" : 3,
+  "customerName" : "Nalina Ranasinghe",
+  "customerEmail" : "nkranasinghe27@gmail.com",
+  "customerPhone" : "0770284928",
+  "address" : "206/10/1, Ovissa North, Pujapitiya",
+  "date" : "2025-05-21T14:13:00",
+  "status" : "CANCELLED",
+  "paymentMethod" : "CARD",
+  "deliveryNotes" : "call when arrived",
+  "total" : 16.47,
+  "items" : [ {
+    "id" : 16,
+    "productId" : null,
+    "name" : "\n                                All-Purpose Flour",
+    "price" : 2.2,
+    "quantity" : 2,
+    "image" : "/images/flour.jpg"
+  }, {
+    "id" : 21,
+    "productId" : null,
+    "name" : "\n                                Cola (100ml)",
+    "price" : 1.52,
+    "quantity" : 4,
+    "image" : "/images/cola.jpeg"
+  }, {
+    "id" : 9,
+    "productId" : null,
+    "name" : "\n                                Chicken Breast",
+    "price" : 5.99,
+    "quantity" : 1,
+    "image" : "/images/chicken.jpg"
+  } ]
+} ]
