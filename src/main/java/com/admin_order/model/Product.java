@@ -7,7 +7,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    //Display all orders
     private String name;
     private double price;
     private String image;
