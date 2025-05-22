@@ -1,5 +1,5 @@
 // Link to member details
-package com.quickmart.service;
+package com.admin.quickmart.service;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;

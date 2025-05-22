@@ -1,7 +1,7 @@
-package com.quickmart.service.impl;
+package com.admin.quickmart.service.impl;
 
-import com.quickmart.model.PrimeMember;
-import com.quickmart.service.PrimeMemberService;
+import com.admin.quickmart.model.PrimeMember;
+import com.admin.quickmart.service.PrimeMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

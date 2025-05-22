@@ -1,4 +1,4 @@
-package com.admin_dashboard.config;
+package com.admin.home.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;

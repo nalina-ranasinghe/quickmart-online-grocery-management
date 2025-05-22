@@ -1,7 +1,7 @@
 // Service implementation
-package com.quickmart.service;
+package com.admin.quickmart.service;
 
-import com.quickmart.model.PrimeMember;
+import com.admin.quickmart.model.PrimeMember;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,11 +1,12 @@
 // PrimeMember java completed
 
-package com.quickmart.model;
+package com.admin.quickmart.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PrimeMember {
     private String id;  // Changed from Long to String to match PM001 format
@@ -23,7 +24,11 @@ public class PrimeMember {
 
     @Min(value = 3000, message = "Points must be at least 3000 for prime members")
     private int points;
+
+    @Pattern(regexp = "^(PLATINUM|GOLD|SILVER|STANDARD)$", message = "Invalid tier value")
     private String tier;
+
+    @Min(value = 0, message = "Discount cannot be negative")
     private double discount;
 
     // Getters and Setters
@@ -65,6 +70,7 @@ public class PrimeMember {
 
     public void setPoints(int points) {
         this.points = points;
+        updateTierBasedOnPoints();
     }
 
     public String getTier() {
@@ -72,6 +78,9 @@ public class PrimeMember {
     }
 
     public void setTier(String tier) {
+        if (tier != null && !tier.matches("^(PLATINUM|GOLD|SILVER|STANDARD)$")) {
+            throw new IllegalArgumentException("Invalid tier value: " + tier);
+        }
         this.tier = tier;
     }
 
@@ -80,9 +89,13 @@ public class PrimeMember {
     }
 
     public void setDiscount(double discount) {
+        if (discount < 0) {
+            throw new IllegalArgumentException("Discount cannot be negative");
+        }
         this.discount = discount;
     }
 
+    @JsonIgnore
     public void updateTierBasedOnPoints() {
         if (points >= 10000) {
             tier = "PLATINUM";
@@ -90,7 +103,7 @@ public class PrimeMember {
         } else if (points >= 5000) {
             tier = "GOLD";
             discount = 0.05;
-        } else if (points >= 1000) {
+        } else if (points >= 3000) {
             tier = "SILVER";
             discount = 0.03;
         } else {
@@ -100,6 +113,9 @@ public class PrimeMember {
     }
 
     public void addPointsFromPurchase(double purchaseAmount) {
+        if (purchaseAmount < 0) {
+            throw new IllegalArgumentException("Purchase amount cannot be negative");
+        }
         // Add 50 points for every 1000 LKR spent
         int pointsToAdd = (int) (purchaseAmount / 1000 * 50);
         points += pointsToAdd;

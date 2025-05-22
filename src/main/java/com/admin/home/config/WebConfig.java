@@ -1,4 +1,4 @@
-package com.admin_dashboard.config;
+package com.admin.home.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

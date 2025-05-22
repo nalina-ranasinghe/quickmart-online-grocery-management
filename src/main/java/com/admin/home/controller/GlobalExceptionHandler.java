@@ -1,4 +1,4 @@
-package com.admin_dashboard.controller;
+package com.admin.home.controller;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

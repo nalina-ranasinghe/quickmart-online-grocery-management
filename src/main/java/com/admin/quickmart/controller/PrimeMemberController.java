@@ -1,10 +1,11 @@
 // Completed Prime Member Controller
 
-package com.quickmart.controller;
+package com.admin.quickmart.controller;
 
-import com.quickmart.model.PrimeMember;
-import com.quickmart.service.PrimeMemberService;
-import com.quickmart.service.QRCodeService;
+import com.admin.quickmart.model.PrimeMember;
+import com.admin.quickmart.service.PrimeMemberService;
+import com.admin.quickmart.service.QRCodeService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,13 +27,16 @@ public class PrimeMemberController {
         this.qrCodeService = qrCodeService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/prime")
     public String home() {
         return "redirect:/admin/prime-members";
     }
 
     @GetMapping("/admin/prime-members")
-    public String listMembers(Model model) {
+    public String listMembers(Model model, HttpSession session) {
+        if (session.getAttribute("adminLoggedIn") == null) {
+            return "redirect:/admin/login";
+        }
         List<PrimeMember> members = primeMemberService.getAllMembers();
         model.addAttribute("members", members);
         return "prime-members";

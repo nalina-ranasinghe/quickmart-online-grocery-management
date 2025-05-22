@@ -1,4 +1,4 @@
-package com.admin_dashboard.controller;
+package com.admin.home.controller;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,14 +24,23 @@ public class AdminController {
     private static final String ADMIN_CREDENTIALS_FILE = "admin_credentials.txt";
 
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(HttpSession session) {
+        // If already logged in, redirect to home
+        if (session.getAttribute("adminLoggedIn") != null) {
+            return "redirect:/admin/home";
+        }
         return "Admin-Login";
     }
 
-    @PostMapping("/home")
-    public ModelAndView processLogin(@RequestParam String username, @RequestParam String password) {
+    @PostMapping("/login")
+    public ModelAndView processLogin(@RequestParam String username, 
+                                   @RequestParam String password,
+                                   HttpSession session) {
         // Validate admin credentials from txt file
         if (validateAdminCredentials(username, password)) {
+            // Set session attributes
+            session.setAttribute("adminLoggedIn", true);
+            session.setAttribute("adminUsername", username);
             return new ModelAndView("redirect:/admin/home");
         } else {
             ModelAndView modelAndView = new ModelAndView("Admin-Login");
@@ -40,27 +50,35 @@ public class AdminController {
     }
 
     @GetMapping("/home")
-    public String showOverview() {
+    public String showOverview(HttpSession session) {
+        // Check if user is logged in
+        if (session.getAttribute("adminLoggedIn") == null) {
+            return "redirect:/admin/login";
+        }
         return "admin-dashboard";
     }
 
     @GetMapping("/user-management")
-    public String showUserManagement() {
+    public String showUserManagement(HttpSession session) {
+        if (session.getAttribute("adminLoggedIn") == null) {
+            return "redirect:/admin/login";
+        }
         return "user-management";
     }
 
-    @GetMapping("/prime-members")
-    public String showPrimeMembers() {
-        return "prime-members";
-    }
-
     @GetMapping("/product-management")
-    public String showProductManagement() {
+    public String showProductManagement(HttpSession session) {
+        if (session.getAttribute("adminLoggedIn") == null) {
+            return "redirect:/admin/login";
+        }
         return "product-management";
     }
 
     @GetMapping("/order-overview")
-    public String showOrderOverview() {
+    public String showOrderOverview(HttpSession session) {
+        if (session.getAttribute("adminLoggedIn") == null) {
+            return "redirect:/admin/login";
+        }
         return "order-overview";
     }
 

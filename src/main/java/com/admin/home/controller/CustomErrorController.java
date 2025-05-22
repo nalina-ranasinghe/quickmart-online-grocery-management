@@ -1,4 +1,4 @@
-package com.admin_dashboard.controller;
+package com.admin.home.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
