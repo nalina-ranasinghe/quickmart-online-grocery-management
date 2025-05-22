@@ -38,14 +38,14 @@ public class ProductController {
         return ResponseEntity.ok(createdProduct);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}")//for creating new data
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return productService.updateProduct(id, product)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")//for removing data
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         if (productService.deleteProduct(id)) {
             return ResponseEntity.noContent().build();
