@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickMart - Checkout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Color Variables */
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --off-white: #f8faf7;
+            --text-dark: #333;
+            --text-light: #777;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--off-white);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Checkout Container */
+        .checkout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Checkout Form Section */
+        .checkout-form-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--cream);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-green);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--medium-green);
+        }
+
+        /* Payment Method Tabs */
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-tab.active {
+            background-color: var(--medium-green);
+            color: white;
+            border-color: var(--medium-green);
+        }
+
+        .payment-tab i {
+            margin-right: 0.5rem;
+        }
+
+        /* Order Summary Section */
+        .order-summary-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .order-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-name {
+            flex: 2;
+        }
+
+        .order-item-qty {
+            flex: 1;
+            text-align: center;
+        }
+
+        .order-item-price {
+            flex: 1;
+            text-align: right;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+
+        .summary-row.total {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .pay-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--dark-green);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .pay-btn:hover {
+            background: #0c2a1a;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="header :: header"></div>
+
+    <div class="checkout-container">
+        <!-- Checkout Form Section -->
+        <section class="checkout-form-section">
+            <h2 class="section-title">Checkout Information</h2>
+            
+            <!-- Delivery Address -->
+            <div class="form-group">
+                <h3 class="text-lg font-semibold mb-4" style="color: var(--dark-green);">Delivery Address</h3>
+                
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Street Address</label>
+                    <input type="text" id="address" class="form-control" required>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="zip">ZIP Code</label>
+                        <input type="text" id="zip" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Method -->
+            <div class="form-group">
+                <h3 class="text-lg font-semibold mb-4" style="color: var(--dark-green);">Payment Method</h3>
+                
+                <div class="payment-methods">
+                    <div class="payment-tab active">
+                        <i class="far fa-credit-card"></i> Credit Card
+                    </div>
+                </div>
+                
+                <!-- Card Payment Form -->
+                <div id="card-form" class="card-form">
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" class="form-control" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="123">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-name">Name on Card</label>
+                        <input type="text" id="card-name" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Order Summary Section -->
+        <section class="order-summary-section">
+            <h2 class="section-title">Order Summary</h2>
+            
+            <div class="order-items">
+                <div class="order-item" th:each="item : ${cartItems}">
+                    <div class="order-item-name" th:text="${item.name}">Product Name</div>
+                    <div class="order-item-qty" th:text="${item.quantity} + 'x'">1x</div>
+                    <div class="order-item-price" th:text="'$' + ${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}">$0.00</div>
+                </div>
+            </div>
+            
+            <div class="summary-details">
+                <div class="summary-row">
+                    <span>Delivery Fee</span>
+                    <span th:text="${totalPrice >= 50 ? 'Free' : '$5.00'}">$5.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span th:text="'$' + ${#numbers.formatDecimal(totalPrice >= 50 ? totalPrice : totalPrice + 5, 1, 2)}">$0.00</span>
+                </div>
+            </div>
+            
+            <button class="pay-btn" onclick="processPayment()">
+                <i class="fas fa-lock"></i> Complete Payment
+            </button>
+            
+            <p class="text-xs text-center mt-4" style="color: var(--text-light);">
+                <i class="fas fa-lock"></i> Your payment is secure and encrypted
+            </p>
+        </section>
+    </div>
+
+    <div th:replace="footer :: footer"></div>
+
+    <script>
+        function processPayment() {
+            // Validate form
+            const fullName = document.getElementById('full-name').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const zip = document.getElementById('zip').value;
+            
+            if (!fullName || !phone || !address || !city || !zip) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate card details
+            const cardNumber = document.getElementById('card-number').value;
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+            const cardName = document.getElementById('card-name').value;
+            
+            if (!cardNumber || !expiry || !cvv || !cardName) {
+                alert('Please fill in all card details');
+                return;
+            }
+
+            // Get total amount from the page
+            const totalAmount = parseFloat(document.querySelector('.summary-row.total span:last-child')
+                .textContent.replace('$', ''));
+            
+            // Create checkout details object
+            const checkoutDetails = {
+                fullName: fullName,
+                phone: phone,
+                address: address,
+                city: city,
+                zipCode: zip,
+                cardNumber: cardNumber,
+                expiryDate: expiry,
+                cardName: cardName,
+                totalAmount: totalAmount
+            };
+            
+            // Process payment
+            fetch('/checkout/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(checkoutDetails)
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Error response:', text);
+                        throw new Error(text || 'Payment processing failed');
+                    });
+                }
+                return response.text();
+            })
+            .then(result => {
+                console.log('Success result:', result);
+                if (result === 'success') {
+                    console.log('Redirecting to order confirmation...');
+                    window.location.href = '/checkout/order-confirmation';
+                } else {
+                    throw new Error('Unexpected response from server');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'There was an error processing your payment. Please try again.');
+            });
+        }
+
+        // Format card number input
+        document.getElementById('card-number').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
+        });
+
+        // Format expiry date input
+        document.getElementById('expiry').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2');
+        });
+    </script>
+</body>
+</html> 

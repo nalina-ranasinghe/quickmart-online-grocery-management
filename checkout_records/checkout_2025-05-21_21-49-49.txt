@@ -1,0 +1,12 @@
+Checkout Details:
+----------------
+Customer: ramitha
+Phone: 07133333
+Address: kandy
+City: kandy
+ZIP: 0111
+Card: ****-****-****-9654
+Expiry: 02/15
+Amount: $17.30
+Time: 2025-05-21T21:49:49.584483700
+

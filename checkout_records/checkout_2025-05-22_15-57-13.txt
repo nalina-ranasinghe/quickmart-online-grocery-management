@@ -1,0 +1,12 @@
+Checkout Details:
+----------------
+Customer: Nalina Ranasinghe
+Phone: 0770284928
+Address: 206/10/1, Ovissa North, Pujapitiya.
+City: Pujapitiya
+ZIP: 20112
+Card: ****-****-****-4000
+Expiry: 05/27
+Amount: $24.35
+Time: 2025-05-22T15:57:13.162755200
+
