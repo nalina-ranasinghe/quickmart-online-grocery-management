@@ -1,9 +1,11 @@
 package com.admin_product.model;
 
+//data stuctures, fields, lombok annotions
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; //timestarp to set up java variables like updated time and added time
 
 @Data
 @NoArgsConstructor
