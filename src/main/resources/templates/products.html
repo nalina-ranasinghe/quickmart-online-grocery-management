@@ -151,6 +151,13 @@
                 <div class="text-gray-600">
                     <span id="product-count">0</span> products available
                 </div>
+                <div class="flex gap-2">
+                    <button class="price-range-btn px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-range="all">All Prices</button>
+                    <button class="price-range-btn px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-range="0-1">$0 - $1</button>
+                    <button class="price-range-btn px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-range="1-3">$1 - $3</button>
+                    <button class="price-range-btn px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-range="3-6">$3 - $6</button>
+                    <button class="price-range-btn px-4 py-2 rounded-full border border-[#85A947] hover:bg-[#EFE3C2]" data-range="6+">$6+</button>
+                </div>
             </div>
         </div>
 
@@ -330,6 +337,105 @@
                 notification.style.opacity = '0';
             }, 3000);
         }
+        
+        // Merge sort implementation for price filtering
+        function mergeSort(arr) {
+            if (arr.length <= 1) {
+                return arr;
+            }
+            
+            // Split array into two halves
+            const mid = Math.floor(arr.length / 2);
+            const left = arr.slice(0, mid);
+            const right = arr.slice(mid);
+            
+            // Recursively sort both halves
+            const sortedLeft = mergeSort(left);
+            const sortedRight = mergeSort(right);
+            
+            // Merge the sorted halves
+            return merge(sortedLeft, sortedRight);
+        }
+        
+        function merge(left, right) {
+            const result = [];
+            let leftIndex = 0;
+            let rightIndex = 0;
+            
+            // Compare and merge elements from both arrays
+            while (leftIndex < left.length && rightIndex < right.length) {
+                if (parseFloat(left[leftIndex].price) <= parseFloat(right[rightIndex].price)) {
+                    result.push(left[leftIndex]);
+                    leftIndex++;
+                } else {
+                    result.push(right[rightIndex]);
+                    rightIndex++;
+                }
+            }
+            
+            // Add remaining elements from left array
+            while (leftIndex < left.length) {
+                result.push(left[leftIndex]);
+                leftIndex++;
+            }
+            
+            // Add remaining elements from right array
+            while (rightIndex < right.length) {
+                result.push(right[rightIndex]);
+                rightIndex++;
+            }
+            
+            return result;
+        }
+        
+        // Price range filtering
+        function filterByPriceRange(range) {
+            let filteredProducts = [...products];
+            
+            switch(range) {
+                case '0-1':
+                    filteredProducts = products.filter(product => parseFloat(product.price) >= 0 && parseFloat(product.price) < 1);
+                    break;
+                case '1-3':
+                    filteredProducts = products.filter(product => parseFloat(product.price) >= 1 && parseFloat(product.price) < 3);
+                    break;
+                case '3-6':
+                    filteredProducts = products.filter(product => parseFloat(product.price) >= 3 && parseFloat(product.price) < 6);
+                    break;
+                case '6+':
+                    filteredProducts = products.filter(product => parseFloat(product.price) >= 6);
+                    break;
+                default:
+                    filteredProducts = [...products];
+            }
+            
+            // Sort the filtered products
+            filteredProducts = mergeSort(filteredProducts);
+            displayProducts(filteredProducts);
+            updateProductCount(filteredProducts.length);
+        }
+
+        // Add price range button functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const priceRangeButtons = document.querySelectorAll('.price-range-btn');
+            priceRangeButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    // Update active button
+                    priceRangeButtons.forEach(btn => btn.classList.remove('active'));
+                    event.target.classList.add('active');
+                    
+                    // Filter and sort products
+                    const range = event.target.dataset.range;
+                    filterByPriceRange(range);
+                });
+            });
+            
+            // Set 'All Prices' as default active
+            const allPricesButton = document.querySelector('[data-range="all"]');
+            if (allPricesButton) {
+                allPricesButton.classList.add('active');
+            }
+        });
     </script>
 </body>
 </html> 

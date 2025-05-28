@@ -1,0 +1,12 @@
+Checkout Details:
+----------------
+Customer: gedd
+Phone: 5165651
+Address: ybny
+City: nnyn
+ZIP: 15
+Card: ****-****-****-16 5
+Expiry: 02/15
+Amount: $12.20
+Time: 2025-05-28T19:49:23.986957600
+

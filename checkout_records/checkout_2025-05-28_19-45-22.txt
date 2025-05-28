@@ -1,0 +1,12 @@
+Checkout Details:
+----------------
+Customer: gedd
+Phone: 07133333
+Address: hgvcyutof87u
+City: ibuioupu
+ZIP: 554
+Card: ****-****-****-5665
+Expiry: 02/15
+Amount: $6.98
+Time: 2025-05-28T19:45:22.326682200
+

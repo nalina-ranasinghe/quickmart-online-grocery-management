@@ -1,0 +1,12 @@
+Checkout Details:
+----------------
+Customer: ramitha
+Phone: 5194848+
+Address: hgvcyutof87u
+City: ibuioupu
+ZIP: 5165
+Card: ****-****-****-4+46
+Expiry: 02/15
+Amount: $14.76
+Time: 2025-05-27T17:12:29.474841600
+

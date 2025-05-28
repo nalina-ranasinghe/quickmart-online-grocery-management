@@ -10,24 +10,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 @Controller
 @RequestMapping("/checkout")
 public class CheckoutController {
     
     private static final Logger logger = LoggerFactory.getLogger(CheckoutController.class);
-    private final CartQueue cartQueue;
+    private final SimpleQueue cartQueue;
     private final CheckoutService checkoutService;
 
     @Autowired
-    public CheckoutController(CartQueue cartQueue, CheckoutService checkoutService) {
+    public CheckoutController(SimpleQueue cartQueue, CheckoutService checkoutService) {
         this.cartQueue = cartQueue;
         this.checkoutService = checkoutService;
     }
 
     @GetMapping
     public String showCheckout(Model model) {
-        model.addAttribute("cartItems", cartQueue.getAllItems());
-        model.addAttribute("totalItems", cartQueue.getTotalItems());
+        model.addAttribute("cartItems", Arrays.asList(cartQueue.getAllItems()));
         model.addAttribute("totalPrice", cartQueue.getTotalPrice());
         return "checkout";
     }
