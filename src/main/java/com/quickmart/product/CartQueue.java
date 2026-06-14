@@ -1,12 +1,14 @@
 package com.quickmart.product;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 @Service
+@SessionScope
 public class CartQueue {
     private final Queue<CartItem> cartQueue;
     private final Map<Long, CartItem> itemMap; // For quick lookups

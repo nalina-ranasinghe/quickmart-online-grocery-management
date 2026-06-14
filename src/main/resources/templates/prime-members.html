@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickMart Admin - Prime Members</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-green: #123523;
+            --medium-green: #3E7B27;
+            --light-green: #85A947;
+            --cream: #EFE3C2;
+            --sidebar-width: 18rem;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f4;
+            min-height: 100vh;
+        }
+
+        /* ===== TOP NAV ===== */
+        #top-navbar {
+            background: linear-gradient(160deg, #123523 70%, #3E7B27 100%);
+            padding: 0.7rem 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease;
+        }
+
+        .navbar-brand img { height: 36px; }
+
+        @media (min-width: 768px) {
+            #top-navbar .navbar-brand {
+                display: none !important;
+            }
+        }
+
+        /* ===== CONTENT ===== */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin: 0;
+        }
+
+        .page-header h1 i {
+            color: #c9a227;
+            margin-right: 0.5rem;
+        }
+
+        .page-header p {
+            color: #6c757d;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* ===== STATS CARDS ===== */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .icon-total   { background: rgba(62,123,39,0.12);  color: var(--medium-green); }
+        .icon-plat    { background: rgba(155,89,182,0.12); color: #9b59b6; }
+        .icon-gold    { background: rgba(201,162,39,0.12); color: #c9a227; }
+        .icon-silver  { background: rgba(108,117,125,0.12); color: #6c757d; }
+        .icon-points  { background: rgba(52,152,219,0.12); color: #3498db; }
+
+        .stat-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark-green);
+        }
+
+        .stat-content p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ===== TABLE CARD ===== */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .table-card .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .table-card .card-header-row h5 {
+            font-weight: 700;
+            color: var(--dark-green);
+            margin: 0;
+        }
+
+        /* ===== SEARCH ===== */
+        .search-box {
+            position: relative;
+            min-width: 260px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .search-box input {
+            padding-left: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        /* ===== MEMBERS TABLE ===== */
+        .members-table th {
+            background-color: var(--dark-green);
+            color: white;
+            font-weight: 600;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .members-table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .members-table tbody tr:hover {
+            background-color: rgba(62,123,39,0.04);
+        }
+
+        /* ===== TIER BADGES ===== */
+        .badge-tier {
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .tier-platinum {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+        }
+
+        .tier-gold {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .tier-silver {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            color: white;
+        }
+
+        /* ===== STATUS BADGE ===== */
+        .badge-status {
+            padding: 0.3rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active    { background: rgba(39,174,96,0.12); color: #27ae60; }
+        .status-suspended { background: rgba(231,76,60,0.12);  color: #e74c3c; }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+        }
+
+        .action-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        .btn-edit   { background-color: #3498db; }
+        .btn-delete { background-color: #e74c3c; }
+
+        /* ===== ADD MEMBER BTN ===== */
+        .btn-add-member {
+            background: linear-gradient(135deg, var(--medium-green), var(--dark-green));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.4rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-add-member:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(62,123,39,0.35);
+            color: white;
+        }
+
+        /* ===== MODALS ===== */
+        .modal-header {
+            background: linear-gradient(135deg, var(--dark-green), var(--medium-green));
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .tier-select-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .tier-option {
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tier-option:hover { border-color: var(--medium-green); }
+        .tier-option.selected { border-color: var(--medium-green); background: rgba(62,123,39,0.06); }
+
+        .tier-option .tier-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+        .tier-option .tier-name { font-weight: 700; font-size: 0.9rem; }
+        .tier-option .tier-disc { font-size: 0.75rem; color: #6c757d; }
+
+        .tier-silver-opt .tier-icon  { color: #94a3b8; }
+        .tier-gold-opt   .tier-icon  { color: #f59e0b; }
+        .tier-platinum-opt .tier-icon { color: #a855f7; }
+
+        /* ===== POINTS INDICATOR ===== */
+        .points-badge {
+            background: rgba(52,152,219,0.1);
+            color: #3498db;
+            border-radius: 8px;
+            padding: 0.25rem 0.65rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #aaa;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: #d4e6d4;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .main-wrapper { margin-left: 70px; }
+            #top-navbar { margin-left: 70px; }
+        }
+        @media (max-width: 768px) {
+            .main-wrapper { margin-left: 0; padding: 1rem; }
+            #top-navbar { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<nav class="navbar navbar-dark" id="top-navbar">
+    <div class="container-fluid d-flex align-items-center">
+        <button class="btn text-white mobile-toggle d-md-none me-3" type="button" style="font-size: 1.25rem; padding: 0; border: none; background: none;">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand d-md-none d-flex align-items-center" href="/admin/order-overview">
+            <img src="/images/QUICKMART_logo.png" alt="QuickMart Logo">
+        </a>
+        <span class="navbar-text text-white d-none d-md-inline-block fw-semibold" style="font-size: 1.1rem;">
+            Admin Portal
+        </span>
+    </div>
+</nav>
+
+<!-- Sidebar Fragment -->
+<div th:replace="~{sidebar :: sidebar}"></div>
+
+<!-- Main Content -->
+<div class="main-wrapper">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h1><i class="fas fa-crown"></i> Prime Members</h1>
+            <p>Manage loyalty program members, tiers, and discount levels</p>
+        </div>
+        <button class="btn btn-add-member" id="btn-add-member" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+            <i class="fas fa-user-plus me-2"></i>Add Prime Member
+        </button>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row" id="stats-row">
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon icon-total"><i class="fas fa-users"></i></div>
+                <div class="stat-content">
+                    <h2 id="stat-total">0</h2>
+                    <p>Total Members</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon icon-plat"><i class="fas fa-gem"></i></div>
+                <div class="stat-content">
+                    <h2 id="stat-platinum">0</h2>
+                    <p>Platinum</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon icon-gold"><i class="fas fa-star"></i></div>
+                <div class="stat-content">
+                    <h2 id="stat-gold">0</h2>
+                    <p>Gold</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon icon-silver"><i class="fas fa-medal"></i></div>
+                <div class="stat-content">
+                    <h2 id="stat-silver">0</h2>
+                    <p>Silver</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-8 col-sm-12">
+            <div class="stat-card">
+                <div class="stat-icon icon-points"><i class="fas fa-coins"></i></div>
+                <div class="stat-content">
+                    <h2 id="stat-points">0</h2>
+                    <p>Total Points Awarded</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Members Table -->
+    <div class="table-card">
+        <div class="card-header-row">
+            <h5><i class="fas fa-list me-2"></i>Membership List</h5>
+            <div class="d-flex gap-2 align-items-center flex-wrap">
+                <select class="form-select form-select-sm" id="tier-filter" style="width:150px;">
+                    <option value="all">All Tiers</option>
+                    <option value="PLATINUM">Platinum</option>
+                    <option value="GOLD">Gold</option>
+                    <option value="SILVER">Silver</option>
+                </select>
+                <select class="form-select form-select-sm" id="status-filter" style="width:150px;">
+                    <option value="all">All Status</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="SUSPENDED">Suspended</option>
+                </select>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control form-control-sm" id="member-search" placeholder="Search members...">
+                </div>
+                <button class="btn btn-outline-secondary btn-sm" id="sort-btn" title="Sort by tier">
+                    <i class="fas fa-sort"></i> Sort by Tier
+                </button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover members-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Member</th>
+                        <th>Email</th>
+                        <th>Tier</th>
+                        <th>Points</th>
+                        <th>Discount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="members-tbody">
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i class="fas fa-crown d-block"></i>
+                                <div>Loading members...</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ADD MEMBER MODAL ===== -->
+<div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMemberModalLabel">
+                    <i class="fas fa-user-plus me-2"></i>Add Prime Member
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addMemberForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="add-username" placeholder="Enter username" required>
+                            <small class="text-muted">Must match a registered user</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="add-email" placeholder="Enter email" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Select Membership Tier</label>
+                        <div class="tier-select-grid">
+                            <div class="tier-option tier-silver-opt selected" data-tier="SILVER">
+                                <div class="tier-icon"><i class="fas fa-medal"></i></div>
+                                <div class="tier-name">Silver</div>
+                                <div class="tier-disc">5% discount</div>
+                            </div>
+                            <div class="tier-option tier-gold-opt" data-tier="GOLD">
+                                <div class="tier-icon"><i class="fas fa-star"></i></div>
+                                <div class="tier-name">Gold</div>
+                                <div class="tier-disc">10% discount</div>
+                            </div>
+                            <div class="tier-option tier-platinum-opt" data-tier="PLATINUM">
+                                <div class="tier-icon"><i class="fas fa-gem"></i></div>
+                                <div class="tier-name">Platinum</div>
+                                <div class="tier-disc">20% discount</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="add-tier" value="SILVER">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Initial Points</label>
+                            <input type="number" class="form-control" id="add-points" value="0" min="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Status</label>
+                            <select class="form-select" id="add-status">
+                                <option value="ACTIVE">Active</option>
+                                <option value="SUSPENDED">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="add-error" class="alert alert-danger d-none"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="save-add-btn">
+                    <i class="fas fa-save me-2"></i>Add Member
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== EDIT MEMBER MODAL ===== -->
+<div class="modal fade" id="editMemberModal" tabindex="-1" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editMemberModalLabel">
+                    <i class="fas fa-edit me-2"></i>Update Member
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editMemberForm">
+                    <input type="hidden" id="edit-id">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Username</label>
+                            <input type="text" class="form-control" id="edit-username" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" class="form-control" id="edit-email">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Membership Tier</label>
+                        <div class="tier-select-grid" id="edit-tier-grid">
+                            <div class="tier-option tier-silver-opt" data-tier="SILVER">
+                                <div class="tier-icon"><i class="fas fa-medal"></i></div>
+                                <div class="tier-name">Silver</div>
+                                <div class="tier-disc">5% discount</div>
+                            </div>
+                            <div class="tier-option tier-gold-opt" data-tier="GOLD">
+                                <div class="tier-icon"><i class="fas fa-star"></i></div>
+                                <div class="tier-name">Gold</div>
+                                <div class="tier-disc">10% discount</div>
+                            </div>
+                            <div class="tier-option tier-platinum-opt" data-tier="PLATINUM">
+                                <div class="tier-icon"><i class="fas fa-gem"></i></div>
+                                <div class="tier-name">Platinum</div>
+                                <div class="tier-disc">20% discount</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="edit-tier" value="SILVER">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Points</label>
+                            <input type="number" class="form-control" id="edit-points" min="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Status</label>
+                            <select class="form-select" id="edit-status">
+                                <option value="ACTIVE">Active</option>
+                                <option value="SUSPENDED">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="edit-error" class="alert alert-danger d-none"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-edit-btn">
+                    <i class="fas fa-save me-2"></i>Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DELETE MODAL ===== -->
+<div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #c0392b, #e74c3c);">
+                <h5 class="modal-title text-white"><i class="fas fa-exclamation-triangle me-2"></i>Remove Prime Member</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-user-times fa-3x text-danger mb-3 d-block"></i>
+                <p class="fs-5 mb-1">Are you sure you want to remove</p>
+                <p class="fw-bold fs-4 text-danger mb-3" id="delete-member-name">-</p>
+                <p class="text-muted">This will revoke their Prime Membership and all associated benefits.</p>
+                <input type="hidden" id="delete-id">
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">
+                    <i class="fas fa-trash me-2"></i>Remove Membership
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    <div id="notif-toast" class="toast align-items-center text-white border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="toast-msg">Done!</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    /**
+     * QuickMart Admin — Prime Members JavaScript
+     * Full CRUD with tier sorting, search, and modal interactions.
+     */
+
+    const API = '/api/prime-members';
+    let allMembers = [];
+    let sortAsc = true;
+
+    // ---- TOAST ----
+    function showToast(msg, success = true) {
+        const toast = document.getElementById('notif-toast');
+        const toastMsg = document.getElementById('toast-msg');
+        toastMsg.textContent = msg;
+        toast.classList.remove('bg-success', 'bg-danger');
+        toast.classList.add(success ? 'bg-success' : 'bg-danger');
+        new bootstrap.Toast(toast, {delay: 3000}).show();
+    }
+
+    // ---- STATS ----
+    async function loadStats() {
+        try {
+            const res = await fetch(`${API}/stats`);
+            const data = await res.json();
+            document.getElementById('stat-total').textContent   = data.total    || 0;
+            document.getElementById('stat-platinum').textContent = data.platinum || 0;
+            document.getElementById('stat-gold').textContent    = data.gold     || 0;
+            document.getElementById('stat-silver').textContent  = data.silver   || 0;
+            document.getElementById('stat-points').textContent  = (data.totalPoints || 0).toLocaleString();
+        } catch (e) { console.error('Stats load failed', e); }
+    }
+
+    // ---- RENDER TABLE ----
+    function tierOrder(tier) {
+        return tier === 'PLATINUM' ? 0 : tier === 'GOLD' ? 1 : 2;
+    }
+
+    function renderMembers(members) {
+        const tbody = document.getElementById('members-tbody');
+        if (!members.length) {
+            tbody.innerHTML = `<tr><td colspan="8">
+                <div class="empty-state">
+                    <i class="fas fa-crown d-block"></i>
+                    <div>No prime members found. Add your first one!</div>
+                </div></td></tr>`;
+            return;
+        }
+        tbody.innerHTML = members.map((m, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td><i class="fas fa-user-circle me-2 text-muted"></i><strong>${escHtml(m.username)}</strong></td>
+                <td>${escHtml(m.email || '-')}</td>
+                <td>${tierBadge(m.tier)}</td>
+                <td><span class="points-badge">${m.points || 0} pts</span></td>
+                <td><span class="fw-semibold text-success">${m.discountRate || 5}%</span></td>
+                <td>${statusBadge(m.status)}</td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <button class="action-btn btn-edit" onclick="openEdit(${m.id})" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="openDelete(${m.id}, '${escHtml(m.username)}')" title="Remove">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    function tierBadge(tier) {
+        if (tier === 'PLATINUM') return `<span class="badge-tier tier-platinum"><i class="fas fa-gem"></i> Platinum</span>`;
+        if (tier === 'GOLD')     return `<span class="badge-tier tier-gold"><i class="fas fa-star"></i> Gold</span>`;
+        return `<span class="badge-tier tier-silver"><i class="fas fa-medal"></i> Silver</span>`;
+    }
+
+    function statusBadge(status) {
+        if (status === 'SUSPENDED') return `<span class="badge-status status-suspended">Suspended</span>`;
+        return `<span class="badge-status status-active">Active</span>`;
+    }
+
+    function escHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ---- LOAD MEMBERS ----
+    async function loadMembers() {
+        try {
+            const res = await fetch(API);
+            allMembers = await res.json();
+            applyFilters();
+        } catch (e) {
+            document.getElementById('members-tbody').innerHTML =
+                `<tr><td colspan="8" class="text-center text-danger py-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Failed to load members. Is the server running?
+                </td></tr>`;
+        }
+    }
+
+    // ---- FILTER + SEARCH + SORT ----
+    function applyFilters() {
+        const search    = document.getElementById('member-search').value.toLowerCase();
+        const tierF     = document.getElementById('tier-filter').value;
+        const statusF   = document.getElementById('status-filter').value;
+
+        let filtered = allMembers.filter(m => {
+            const matchSearch = !search ||
+                m.username.toLowerCase().includes(search) ||
+                (m.email || '').toLowerCase().includes(search);
+            const matchTier   = tierF   === 'all' || m.tier   === tierF;
+            const matchStatus = statusF === 'all' || m.status === statusF;
+            return matchSearch && matchTier && matchStatus;
+        });
+
+        // Sort by tier
+        filtered.sort((a, b) => {
+            const diff = tierOrder(a.tier) - tierOrder(b.tier);
+            return sortAsc ? diff : -diff;
+        });
+
+        renderMembers(filtered);
+    }
+
+    document.getElementById('member-search').addEventListener('input', applyFilters);
+    document.getElementById('tier-filter').addEventListener('change', applyFilters);
+    document.getElementById('status-filter').addEventListener('change', applyFilters);
+    document.getElementById('sort-btn').addEventListener('click', () => {
+        sortAsc = !sortAsc;
+        document.getElementById('sort-btn').innerHTML =
+            `<i class="fas fa-sort"></i> Sort by Tier ${sortAsc ? '▲' : '▼'}`;
+        applyFilters();
+    });
+
+    // ---- TIER SELECTOR (shared) ----
+    function initTierSelector(containerSelector, hiddenId) {
+        document.querySelectorAll(`${containerSelector} .tier-option`).forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll(`${containerSelector} .tier-option`).forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                document.getElementById(hiddenId).value = opt.dataset.tier;
+            });
+        });
+    }
+
+    initTierSelector('#addMemberModal', 'add-tier');
+    initTierSelector('#editMemberModal', 'edit-tier');
+
+    // ---- ADD MEMBER ----
+    document.getElementById('save-add-btn').addEventListener('click', async () => {
+        const username = document.getElementById('add-username').value.trim();
+        const email    = document.getElementById('add-email').value.trim();
+        const tier     = document.getElementById('add-tier').value;
+        const points   = parseInt(document.getElementById('add-points').value) || 0;
+        const status   = document.getElementById('add-status').value;
+        const errEl    = document.getElementById('add-error');
+
+        if (!username || !email) {
+            errEl.textContent = 'Username and email are required.';
+            errEl.classList.remove('d-none');
+            return;
+        }
+
+        try {
+            const res = await fetch(API, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, email, tier, points, status})
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                errEl.textContent = err.error || 'Failed to add member.';
+                errEl.classList.remove('d-none');
+                return;
+            }
+            bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
+            document.getElementById('addMemberForm').reset();
+            document.getElementById('add-tier').value = 'SILVER';
+            document.querySelectorAll('#addMemberModal .tier-option').forEach(o => o.classList.remove('selected'));
+            document.querySelector('#addMemberModal .tier-silver-opt').classList.add('selected');
+            errEl.classList.add('d-none');
+            await refresh();
+            showToast(`${username} added as a Prime Member! 🎉`);
+        } catch (e) {
+            errEl.textContent = 'Network error. Please try again.';
+            errEl.classList.remove('d-none');
+        }
+    });
+
+    // ---- EDIT MEMBER ----
+    async function openEdit(id) {
+        const member = allMembers.find(m => m.id === id);
+        if (!member) return;
+        document.getElementById('edit-id').value       = member.id;
+        document.getElementById('edit-username').value = member.username;
+        document.getElementById('edit-email').value    = member.email || '';
+        document.getElementById('edit-points').value   = member.points || 0;
+        document.getElementById('edit-status').value   = member.status || 'ACTIVE';
+        document.getElementById('edit-tier').value     = member.tier || 'SILVER';
+
+        document.querySelectorAll('#editMemberModal .tier-option').forEach(opt => {
+            opt.classList.toggle('selected', opt.dataset.tier === member.tier);
+        });
+
+        document.getElementById('edit-error').classList.add('d-none');
+        new bootstrap.Modal(document.getElementById('editMemberModal')).show();
+    }
+
+    document.getElementById('save-edit-btn').addEventListener('click', async () => {
+        const id     = document.getElementById('edit-id').value;
+        const email  = document.getElementById('edit-email').value.trim();
+        const tier   = document.getElementById('edit-tier').value;
+        const points = parseInt(document.getElementById('edit-points').value) || 0;
+        const status = document.getElementById('edit-status').value;
+        const errEl  = document.getElementById('edit-error');
+
+        try {
+            const res = await fetch(`${API}/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, tier, points, status})
+            });
+            if (!res.ok) {
+                errEl.textContent = 'Failed to update member.';
+                errEl.classList.remove('d-none');
+                return;
+            }
+            bootstrap.Modal.getInstance(document.getElementById('editMemberModal')).hide();
+            await refresh();
+            showToast('Member updated successfully!');
+        } catch (e) {
+            errEl.textContent = 'Network error. Please try again.';
+            errEl.classList.remove('d-none');
+        }
+    });
+
+    // ---- DELETE MEMBER ----
+    function openDelete(id, username) {
+        document.getElementById('delete-id').value = id;
+        document.getElementById('delete-member-name').textContent = username;
+        new bootstrap.Modal(document.getElementById('deleteMemberModal')).show();
+    }
+
+    document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+        const id = document.getElementById('delete-id').value;
+        try {
+            await fetch(`${API}/${id}`, {method: 'DELETE'});
+            bootstrap.Modal.getInstance(document.getElementById('deleteMemberModal')).hide();
+            await refresh();
+            showToast('Membership removed.', true);
+        } catch (e) {
+            showToast('Failed to remove member.', false);
+        }
+    });
+
+    // ---- INIT ----
+    async function refresh() {
+        await Promise.all([loadMembers(), loadStats()]);
+    }
+
+    document.addEventListener('DOMContentLoaded', refresh);
+</script>
+</body>
+</html>

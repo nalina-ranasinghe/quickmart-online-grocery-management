@@ -17,18 +17,18 @@ import java.util.Arrays;
 public class CheckoutController {
     
     private static final Logger logger = LoggerFactory.getLogger(CheckoutController.class);
-    private final SimpleQueue cartQueue;
+    private final CartQueue cartQueue;
     private final CheckoutService checkoutService;
 
     @Autowired
-    public CheckoutController(SimpleQueue cartQueue, CheckoutService checkoutService) {
+    public CheckoutController(CartQueue cartQueue, CheckoutService checkoutService) {
         this.cartQueue = cartQueue;
         this.checkoutService = checkoutService;
     }
 
     @GetMapping
     public String showCheckout(Model model) {
-        model.addAttribute("cartItems", Arrays.asList(cartQueue.getAllItems()));
+        model.addAttribute("cartItems", cartQueue.getAllItems());
         model.addAttribute("totalPrice", cartQueue.getTotalPrice());
         return "checkout";
     }

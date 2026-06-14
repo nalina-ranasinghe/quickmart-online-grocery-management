@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+checkout_records/
+users.txt
