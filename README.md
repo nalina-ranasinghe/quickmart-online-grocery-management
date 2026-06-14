@@ -142,3 +142,4 @@ Here are some screenshots from the application:
     
     ![Order Overview](Screenshots/order_overview.png)
 
+*Built with ❤️ by Group 16 for SE1020.*
