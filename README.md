@@ -1,14 +1,15 @@
-# QuickMart Web Application 🛒
+# QuickMart Web Application
+![QuickMart](src\main\resources\static\QUICKMART_logo.png)
 
-**QuickMart** is a robust e-commerce grocery store web application built using **Java Spring Boot**. Developed collaboratively as a university group project (Group 16) during our 1st semester, this application demonstrates functional backend architecture, modular design, and a custom file-based persistence system. 
+**QuickMart** is a robust e-commerce grocery store web application built using **Java Spring Boot**. Developed collaboratively as a university group project (Group 16) during our 1st year 2nd semester, this application demonstrates functional backend architecture, modular design, and a custom file-based persistence system. 
 
 The project has been cleaned and made portfolio-ready to showcase our web development and team collaboration skills.
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
-### 🌟 Prime Membership (Loyalty Program)
+###  Prime Membership (Loyalty Program)
 I led the design and integration of the **Prime Membership (Loyalty member)** feature, enabling a centralized Loyalty Program management system within the Admin Dashboard.
 *   **CRUD Operations**:
     *   **Create**: Add new loyalty members or upgrade existing users to loyalty status.
@@ -19,23 +20,23 @@ I led the design and integration of the **Prime Membership (Loyalty member)** fe
     *   **Search Engine**: Built-in functionality to query members instantly by Name or ID.
     *   **Sorting System**: Tier-wise sorting algorithm to organize members efficiently by their tier: **Silver, Gold, and Platinum**.
 
-### 🛍️ Shopping Cart & Checkout
+###  Shopping Cart & Checkout
 *   Dynamic shopping cart supporting add, update (quantity adjustments), and remove operations.
 *   Calculates real-time totals with delivery fee logic (Free delivery for orders $50+).
 *   Session-scoped checkout process handling shipping and masked payment details.
 
-### 🔒 User Authentication & Management
+###  User Authentication & Management
 *   Custom session-based authentication system.
 *   Distinct roles (Admin vs. User) with secure file-based storage.
 *   Admin dashboard for system-wide user management.
 
-### 🍎 Product Catalog
+###  Product Catalog
 *   Browse products across various categories: *Fresh Produce, Dairy & Eggs, Meat & Seafood, Pantry Staples, Snacks & Beverages*.
 *   Support for dynamic product image uploads.
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 *   **Backend**: Java 17, Spring Boot 3.2.3, Spring Web
 *   **Frontend**: Thymeleaf, HTML5, Vanilla CSS3, FontAwesome
@@ -44,7 +45,7 @@ I led the design and integration of the **Prime Membership (Loyalty member)** fe
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 To run this project locally, you will need:
 *   [Java Development Kit (JDK) 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or higher
@@ -95,7 +96,7 @@ Follow these step-by-step instructions to get the application running on your lo
 
 ## 👥 Team Contributions
 
-This Online Grocery Order Management System was built collaboratively by our 6-member group in our 1st semester for the module Object Oriented Programming (SE1020). As a sub-task, we implemented the **Queue algorithm** to process customer orders sequentially and the **Merge Sort algorithm** to sort products by category or price.
+This Online Grocery Order Management System was built collaboratively by our 6-member group in our 1st year 2nd semester for the module Object Oriented Programming (SE1020). As a sub-task, we implemented the **Queue algorithm** to process customer orders sequentially and the **Merge Sort algorithm** to sort products by category or price.
 
 | Module | Assigned Member | Student ID | Key Responsibilities |
 | :--- | :--- | :--- | :--- |
@@ -108,7 +109,7 @@ This Online Grocery Order Management System was built collaboratively by our 6-m
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 Here are some screenshots from the application:
 
