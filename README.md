@@ -1,5 +1,8 @@
+<p align="center">
+  <img src="src/main/resources/static/images/QUICKMART_logo.png" alt="QuickMart Logo" width="180" />
+</p>
+
 # QuickMart Web Application
-![QuickMart](src\main\resources\static\QUICKMART_logo.png)
 
 **QuickMart** is a robust e-commerce grocery store web application built using **Java Spring Boot**. Developed collaboratively as a university group project (Group 16) during our 1st year 2nd semester, this application demonstrates functional backend architecture, modular design, and a custom file-based persistence system. 
 
