@@ -101,14 +101,14 @@ Follow these step-by-step instructions to get the application running on your lo
 
 This Online Grocery Order Management System was built collaboratively by our 6-member group in our 1st year 2nd semester for the module Object Oriented Programming (SE1020). As a sub-task, we implemented the **Queue algorithm** to process customer orders sequentially and the **Merge Sort algorithm** to sort products by category or price.
 
-| Module | Assigned Member | Student ID | Key Responsibilities |
-| :--- | :--- | :--- | :--- |
-| **Loyalty & Discounts (Leader)** | Nalina Ranasinghe | IT24101529 | Managed Prime Membership module, Admin Dashboard integration, tier-based sorting, and CRUD for loyalty members. |
-| **User Management** | Ramitha Bandara | IT24101559 | Developed Login/Registration forms, User Dashboard, and CRUD for user accounts. |
-| **Product Management** | Divyanjali Wickramarachchi | IT24101553 | Displayed products, enabled product selection, and implemented CRUD for products. |
-| **Cart Management** | Hamdhan Ahamed | IT24101545 | Displayed selected items, managed quantity modifications/removals, and implemented CRUD for the cart. |
-| **Order Processing** | Binuka Bandara | IT24101538 | Viewed past & pending orders, allowed order updates, and implemented CRUD for orders. |
-| **Payment & Checkout** | Samadhi Herath | IT24101690 | Created payment form, order confirmation UI, and implemented CRUD for payments. |
+| Module | Assigned Member | Key Responsibilities |
+| :--- | :--- | :--- |
+| **Loyalty & Discounts (Leader)** | Nalina Ranasinghe | Managed Prime Membership module, Admin Dashboard integration, tier-based sorting, and CRUD for loyalty members. |
+| **User Management** | Ramitha Bandara | Developed Login/Registration forms, User Dashboard, and CRUD for user accounts. |
+| **Product Management** | Divyanjali Wickramarachchi | Displayed products, enabled product selection, and implemented CRUD for products. |
+| **Cart Management** | Hamdhan Ahamed | Displayed selected items, managed quantity modifications/removals, and implemented CRUD for the cart. |
+| **Order Processing** | Binuka Bandara | Viewed past & pending orders, allowed order updates, and implemented CRUD for orders. |
+| **Payment & Checkout** | Samadhi Herath | Created payment form, order confirmation UI, and implemented CRUD for payments. |
 
 ---
 
