@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/main/resources/static/images/QUICKMART_logo.png" alt="QuickMart Logo" width="180" />
+  <img src="src/main/resources/static/images/QUICKMART_logo.png" alt="QuickMart Logo" width="540" />
 </p>
 
 # QuickMart Web Application
@@ -142,4 +142,4 @@ Here are some screenshots from the application:
     
     ![Order Overview](Screenshots/order_overview.png)
 
-*Built with ❤️ by Group 16 for SE1020.*
+*Built with ❤️ by 2025_OOP_Group 16 for SE1020.*
